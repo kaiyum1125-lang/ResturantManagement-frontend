@@ -1,0 +1,39 @@
+.page-container {
+  padding: 20px;
+  margin-left: 250px;
+  max-width: 1000px;
+
+  h2 {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #343a40;
+  }
+
+  p {
+    margin-bottom: 25px;
+    color: #6c757d;
+  }
+
+  form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+  }
+
+  table {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+
+    th, td {
+      vertical-align: middle;
+    }
+
+    button {
+      min-width: 70px;
+    }
+  }
+}

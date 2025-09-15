@@ -1,0 +1,25 @@
+.navbar {
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  .nav-link {
+    font-size: 1.1rem;
+    margin-right: 0.5rem;
+
+    &.active {
+      color: #ff5722 !important; // Highlight active link
+    }
+  }
+
+  .btn-primary {
+    background-color: #ff5722;
+    border-color: #ff5722;
+
+    &:hover {
+      background-color: #e64a19;
+      border-color: #e64a19;
+    }
+  }
+}

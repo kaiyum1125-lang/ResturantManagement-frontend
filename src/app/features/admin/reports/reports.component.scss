@@ -1,0 +1,53 @@
+.page-container {
+  padding: 20px;
+  margin-left: 250px; // sidebar width
+  min-height: 100vh;
+
+  h2 {
+    margin-bottom: 10px;
+    color: #343a40;
+  }
+
+  p {
+    color: #6c757d;
+    margin-bottom: 25px;
+  }
+
+  .report-card {
+    padding: 25px 15px;
+    border-radius: 12px;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 150px; // same height for all cards
+
+    h4 {
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+    }
+
+    p {
+      font-size: 1.4rem;
+      font-weight: bold;
+    }
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+    }
+  }
+
+  .card-daily-sales { background: linear-gradient(135deg, #6f42c1, #6610f2); }
+  .card-monthly-revenue { background: linear-gradient(135deg, #20c997, #198754); }
+  .card-staff-attendance { background: linear-gradient(135deg, #fd7e14, #fd7e14cc); }
+  .card-top-menu { background: linear-gradient(135deg, #0dcaf0, #0d6efd); }
+  .card-customer-feedback { background: linear-gradient(135deg, #ffc107, #ff922b); }
+  .card-expenses { background: linear-gradient(135deg, #dc3545, #b02a37); }
+}

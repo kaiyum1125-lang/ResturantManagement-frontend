@@ -1,0 +1,40 @@
+{
+  "staff": [
+    {
+      "name": "Arman husain",
+      "role": "15",
+      "email": "arman@example.com",
+      "id": "3"
+    },
+    {
+      "name": "jalal Uddin",
+      "role": "12",
+      "email": "jalal@example.com",
+      "id": "dad5"
+    },
+    {
+      "name": "Anwar hasan",
+      "role": "25",
+      "email": "anwar@example.com",
+      "id": "404d"
+    },
+    {
+      "name": "Arif vai ",
+      "role": "21",
+      "email": "saiful@gmail.com",
+      "id": "198c"
+    },
+    {
+      "name": "Arif vai ",
+      "role": "ABVdse",
+      "email": "saiful@gmail.com",
+      "id": "442a"
+    },
+    {
+      "name": "Rahman",
+      "role": "Stuff",
+      "email": "saiful@gmail.com",
+      "id": "a453"
+    }
+  ]
+}

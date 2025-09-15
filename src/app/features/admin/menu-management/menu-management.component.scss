@@ -1,0 +1,34 @@
+.page-container {
+  padding: 20px;
+  margin-left: 250px; // sidebar width
+  min-height: 100vh;
+  background-color: #f8f9fa;
+
+  h2 { margin-bottom: 10px; color: #343a40; }
+  p { color: #6c757d; margin-bottom: 25px; }
+
+  form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+
+    .form-label { font-weight: 500; }
+    input.form-control { border-radius: 6px; }
+    button { min-width: 100px; }
+  }
+
+  table {
+    background-color: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    th, td { vertical-align: middle; }
+    button { min-width: 70px; }
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container { margin-left: 0; padding: 15px; }
+}

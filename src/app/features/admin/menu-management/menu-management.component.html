@@ -1,0 +1,52 @@
+<app-sidebar></app-sidebar>
+<div class="page-container">
+
+  <h2>Menu Management</h2>
+  <p>Here you can add, edit, or delete menu items.</p>
+
+  <!-- Add / Edit Form -->
+  <form [formGroup]="menuForm" (ngSubmit)="submitForm()" class="mb-4 p-3 border rounded bg-light">
+    <div class="row g-2 align-items-end">
+      <div class="col-md-4">
+        <label for="name" class="form-label">Item Name</label>
+        <input id="name" type="text" class="form-control" formControlName="name">
+      </div>
+      <div class="col-md-4">
+        <label for="price" class="form-label">Price</label>
+        <input id="price" type="number" class="form-control" formControlName="price">
+      </div>
+      <div class="col-md-4">
+        <label for="description" class="form-label">Description</label>
+        <input id="description" type="text" class="form-control" formControlName="description">
+      </div>
+      <div class="col-md-12 text-end mt-2">
+        <button type="submit" class="btn btn-success me-2">{{ editMode ? 'Update' : 'Add' }}</button>
+        <button type="button" class="btn btn-secondary" (click)="resetForm()">Cancel</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Menu Items Table -->
+  <table class="table table-hover table-bordered text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Item Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of menuItems">
+        <td>{{ item.name }}</td>
+        <td>\${{ item.price }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-1" (click)="editItem(item)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteItem(item)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
