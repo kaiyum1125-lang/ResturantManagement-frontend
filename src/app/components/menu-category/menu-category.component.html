@@ -1,0 +1,43 @@
+
+<app-sidebar></app-sidebar>
+<div style="margin-left: 250px; padding: 20px; min-height: 100vh; background-color: #f8f9fa;">
+  <h2>Menu Categories</h2>
+
+  <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()" class="mb-4">
+    <div class="form-group mb-2">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Category Name"
+        formControlName="name"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-success me-2" [disabled]="categoryForm.invalid">
+      {{ categoryForm.value.id ? 'Update' : 'Create' }}
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="categoryForm.reset()">
+      Clear
+    </button>
+  </form>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th width="180">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of categories">
+        <td>{{ cat.id }}</td>
+        <td>{{ cat.name }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="edit(cat)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="delete(cat.id!)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,70 @@
+<app-sidebar></app-sidebar>
+
+<div class="main-content" style="margin-left: 250px; padding: 20px; min-height: 100vh; background-color: #f8f9fa;">
+  <div class="container">
+    <!-- Form Section -->
+    <form #formRef [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="card p-4 shadow-sm mb-4">
+      <h5 class="mb-3">{{ itemForm.value.id ? 'Edit Item' : 'Add Item' }}</h5>
+
+      <div class="mb-3">
+        <label for="name" class="form-label">Item Name</label>
+        <input id="name" formControlName="name" class="form-control" placeholder="Enter item name" />
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <input id="description" formControlName="description" class="form-control" placeholder="Enter description" />
+      </div>
+
+      <div class="mb-3">
+        <label for="price" class="form-label">Price</label>
+        <input id="price" formControlName="price" type="number" class="form-control" placeholder="Enter price" />
+      </div>
+
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select id="category" formControlName="category" class="form-select">
+          <option [ngValue]="null" disabled>Select a category</option>
+          <option *ngFor="let cat of categories" [ngValue]="cat">{{ cat.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-check mb-3">
+        <input type="checkbox" id="available" class="form-check-input" formControlName="available" />
+        <label for="available" class="form-check-label">Available</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        {{ itemForm.value.id ? 'Update' : 'Save' }}
+      </button>
+    </form>
+
+    <!-- Table Section -->
+    <h3 class="mb-3">Item List</h3>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover bg-white shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th colspan="2" class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items">
+            <td>{{ item.name }}</td>
+            <td>{{ item.price | currency:'USD' }}</td>
+            <td>{{ item.category.name }}</td>
+            <td>
+              <button class="btn btn-sm btn-warning" (click)="edit(item)">Edit</button>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="delete(item.id!)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

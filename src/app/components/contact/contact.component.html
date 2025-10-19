@@ -1,0 +1,163 @@
+<div class="contact-page">
+  <!-- Header -->
+  <section class="contact-header text-center py-5 bg-light">
+    <div class="container">
+      <h1 class="display-4 text-warning mb-3">Contact Us</h1>
+      <p class="lead">We'd love to hear from you</p>
+    </div>
+  </section>
+
+  <!-- Contact Info & Form -->
+  <section class="contact-content py-5">
+    <div class="container">
+      <div class="row g-5">
+        <!-- Contact Information -->
+        <div class="col-lg-6">
+          <h3 class="mb-4">Get in Touch</h3>
+          
+          <div class="contact-info mb-4">
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-geo-alt-fill text-warning me-3 fs-4"></i>
+              <div>
+                <h5>Address</h5>
+                <p>123 Main Street, City, State 12345</p>
+              </div>
+            </div>
+            
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-telephone-fill text-warning me-3 fs-4"></i>
+              <div>
+                <h5>Phone</h5>
+                <p>+1 (555) 123-4567</p>
+              </div>
+            </div>
+            
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-envelope-fill text-warning me-3 fs-4"></i>
+              <div>
+                <h5>Email</h5>
+                <p>info@thegrill.com</p>
+              </div>
+            </div>
+            
+            <div class="d-flex align-items-center mb-3">
+              <i class="bi bi-clock-fill text-warning me-3 fs-4"></i>
+              <div>
+                <h5>Opening Hours</h5>
+                <p>Monday - Sunday: 11:00 AM - 10:00 PM</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Map -->
+          <div class="map-container mt-4">
+            <div class="ratio ratio-16x9">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3023.9503398796587!2d-73.99839948458983!3d40.72576677933007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598a9cbbd36d%3A0x7fb1d0582cdfadce!2s123%20Main%20St%2C%20New%20York%2C%20NY%2010001%2C%20USA!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+              </iframe>
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="col-lg-6">
+          <h3 class="mb-4">Send us a Message</h3>
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" 
+                       class="form-control" 
+                       id="name"
+                       formControlName="name"
+                       [class.is-invalid]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+                <div class="invalid-feedback">
+                  Please provide your name.
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" 
+                       class="form-control" 
+                       id="email"
+                       formControlName="email"
+                       [class.is-invalid]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+                <div class="invalid-feedback">
+                  Please provide a valid email.
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <label for="subject" class="form-label">Subject</label>
+                <input type="text" 
+                       class="form-control" 
+                       id="subject"
+                       formControlName="subject"
+                       [class.is-invalid]="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched">
+                <div class="invalid-feedback">
+                  Please provide a subject.
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <label for="message" class="form-label">Message</label>
+                <textarea class="form-control" 
+                          id="message" 
+                          rows="5"
+                          formControlName="message"
+                          [class.is-invalid]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"></textarea>
+                <div class="invalid-feedback">
+                  Please enter your message.
+                </div>
+              </div>
+              
+              <div class="col-12">
+                <button type="submit" 
+                        class="btn btn-warning btn-lg"
+                        [disabled]="contactForm.invalid">
+                  Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section bg-light py-5">
+    <div class="container">
+      <h2 class="text-center mb-5">Frequently Asked Questions</h2>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="accordion" id="faqAccordion">
+            <div class="accordion-item" *ngFor="let faq of faqs; let i = index">
+              <h2 class="accordion-header">
+                <button class="accordion-button" 
+                        type="button" 
+                        [class.collapsed]="i !== 0"
+                        data-bs-toggle="collapse" 
+                        [attr.data-bs-target]="'#faq' + i">
+                  {{faq.question}}
+                </button>
+              </h2>
+              <div [id]="'faq' + i" 
+                   class="accordion-collapse collapse" 
+                   [class.show]="i === 0"
+                   data-bs-parent="#faqAccordion">
+                <div class="accordion-body">
+                  {{faq.answer}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

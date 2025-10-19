@@ -1,0 +1,243 @@
+
+<div>
+    <app-sidebar></app-sidebar>
+</div>
+<div class="page-container">
+
+
+    <div class="admin-menu">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="bi bi-menu-button"></i>
+        Menu Items Management
+      </h1>
+      <p class="page-subtitle">Manage your restaurant's menu items</p>
+    </div>
+    <button class="btn btn-primary" (click)="openMenuItemModal()">
+      <i class="bi bi-plus-circle"></i>
+      Add New Item
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filter-group">
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" 
+               placeholder="Search menu items..."
+               [(ngModel)]="searchTerm"
+               (input)="filterMenuItems()">
+      </div>
+
+      <select class="filter-select" [(ngModel)]="selectedCategory" (change)="filterMenuItems()">
+        <option value="">All Categories</option>
+        <option *ngFor="let category of categories" [value]="category.id">
+          {{category.name}}
+        </option>
+      </select>
+
+      <select class="filter-select" [(ngModel)]="availabilityFilter" (change)="filterMenuItems()">
+        <option value="">All Status</option>
+        <option value="available">Available</option>
+        <option value="unavailable">Unavailable</option>
+      </select>
+
+      <button class="btn btn-outline" (click)="clearFilters()">
+        <i class="bi bi-arrow-clockwise"></i>
+        Reset
+      </button>
+    </div>
+
+    <div class="results-info">
+      Showing {{filteredItems.length}} of {{menuItems.length}} items
+    </div>
+  </div>
+
+  <!-- Menu Items Grid -->
+  <div class="menu-grid" *ngIf="filteredItems.length > 0">
+    <div *ngFor="let item of filteredItems" class="menu-card">
+      <div class="menu-card-image">
+        <img [src]="item.imageUrl || 'assets/default-food.jpg'" 
+             [alt]="item.name"
+             (error)="handleImageError($event)">
+        <div class="menu-card-badges">
+
+          <span class="badge" [ngClass]="item.available ? 'available' : 'unavailable'">
+            {{item.available ? 'Available' : 'Unavailable'}} 
+          </span>
+          <span class="badge category">{{item.category.name}}</span>
+        </div>
+      </div>
+
+      <div class="menu-card-content">
+        <h3 class="menu-item-name">{{item.name}}</h3>
+        <p class="menu-item-description">{{item.description || 'No description'}}</p>
+        
+        <div class="menu-item-price">${{item.price}}</div>
+
+        <div class="menu-card-actions">
+          <button class="btn-icon success" (click)="toggleAvailability(item)" 
+                  [title]="item.available ? 'Mark Unavailable' : 'Mark Available'">
+            <i class="bi" [class.bi-check-circle]="item.available" [class.bi-x-circle]="!item.available">Available</i>
+          </button>
+          
+          <button class="btn-icon primary" (click)="editMenuItem(item)" title="Edit">
+            <i class="bi bi-pencil">Edit</i>
+          </button>
+          
+          <button class="btn-icon danger" (click)="deleteMenuItem(item)" title="Delete">
+            <i class="bi bi-trash">Delete</i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="filteredItems.length === 0" class="empty-state">
+    <i class="bi bi-menu-button"></i>
+    <h3>No menu items found</h3>
+    <p>Try adjusting your search filters or add a new menu item.</p>
+    <button class="btn btn-primary" (click)="openMenuItemModal()">
+      <i class="bi bi-plus-circle"></i>
+      Add Your First Item
+    </button>
+  </div>
+
+  <!-- Menu Item Modal -->
+  <div class="modal" [class.active]="showModal">
+    <div class="modal-backdrop" (click)="closeModal()"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>{{isEditing ? 'Edit Menu Item' : 'Add New Menu Item'}}</h2>
+        <button class="btn-icon" (click)="closeModal()">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+
+      <form [formGroup]="menuItemForm" (ngSubmit)="saveMenuItem()">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">Item Name *</label>
+              <input type="text" 
+                     id="name"
+                     formControlName="name"
+                     placeholder="Enter item name">
+              <div class="error-message" *ngIf="menuItemForm.get('name')?.invalid && menuItemForm.get('name')?.touched">
+                Name is required and must be at least 2 characters.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="price">Price *</label>
+              <div class="input-with-icon">
+                <span class="input-icon">$</span>
+                <input type="number" 
+                       id="price"
+                       formControlName="price"
+                       step="0.01"
+                       min="0"
+                       placeholder="0.00">
+              </div>
+              <div class="error-message" *ngIf="menuItemForm.get('price')?.invalid && menuItemForm.get('price')?.touched">
+                Valid price is required.
+              </div>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description">Description</label>
+              <textarea id="description"
+                        formControlName="description"
+                        rows="3"
+                        placeholder="Enter item description..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="category">Category *</label>
+              <select id="category" formControlName="categoryId">
+                <option value="">Select Category</option>
+                <option *ngFor="let category of categories" [value]="category.id">
+                  {{category.name}}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="menuItemForm.get('categoryId')?.invalid && menuItemForm.get('categoryId')?.touched">
+                Category is required.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="imageUrl">Image URL</label>
+              <input type="text" 
+                     id="imageUrl"
+                     formControlName="imageUrl"
+                     placeholder="https://example.com/image.jpg">
+            </div>
+
+            <div class="form-group full-width">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="available">
+                <span class="checkmark"></span>
+                Available for ordering
+              </label>
+            </div>
+
+            <!-- Image Preview -->
+            <div class="form-group full-width" *ngIf="menuItemForm.get('imageUrl')?.value">
+              <label>Image Preview</label>
+              <div class="image-preview">
+                <img [src]="menuItemForm.get('imageUrl')?.value" 
+                     (error)="handlePreviewImageError($event)"
+                     alt="Preview">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" (click)="closeModal()">Cancel</button>
+          <button type="submit" 
+                  class="btn btn-primary" 
+                  [disabled]="menuItemForm.invalid || isSaving">
+            <i class="bi" [class.bi-check-circle]="!isSaving" [class.bi-arrow-clockwise]="isSaving"></i>
+            {{isSaving ? 'Saving...' : (isEditing ? 'Update Item' : 'Create Item')}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal" [class.active]="showDeleteModal">
+    <div class="modal-backdrop" (click)="closeDeleteModal()"></div>
+    <div class="modal-content small">
+      <div class="modal-header">
+        <h2>Confirm Delete</h2>
+        <button class="btn-icon" (click)="closeDeleteModal()">
+          <i class="bi bi-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="delete-warning">
+          <i class="bi bi-exclamation-triangle"></i>
+          <h3>Delete "{{selectedMenuItem?.name}}"?</h3>
+          <p>This action cannot be undone. The menu item will be permanently removed from your menu.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="isDeleting">
+          <i class="bi" [class.bi-trash]="!isDeleting" [class.bi-arrow-clockwise]="isDeleting"></i>
+          {{isDeleting ? 'Deleting...' : 'Delete Item'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

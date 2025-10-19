@@ -9,10 +9,18 @@ import { MenuManagementComponent } from './features/admin/menu-management/menu-m
 import { StaffManagementComponent } from './features/admin/staff-management/staff-management.component';
 import { ReportsComponent } from './features/admin/reports/reports.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/home/home.component';
+import { MenuCategoryComponent } from './components/menu-category/menu-category.component';
+import { MenuItemComponent } from './components/menu-item/menu-item.component';
+import { MenuComponent } from './components/menu/menu.component';
+import { AboutComponent } from './components/about/about.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { AdminMenuComponent } from './features/admin/admin-menu/admin-menu.component';
+import { AdminCategoriesComponent } from './features/admin/admin-categories/admin-categories.component';
+import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -24,13 +32,22 @@ import { HomeComponent } from './components/home/home.component';
     ReportsComponent,
     NavbarComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    MenuCategoryComponent,
+    MenuItemComponent,
+    MenuComponent,
+    AboutComponent,
+    ContactComponent,
+    AdminMenuComponent,
+    AdminCategoriesComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule, // <-- Add this
+    ReactiveFormsModule, 
+    FormsModule
 
   ],
   providers: [],

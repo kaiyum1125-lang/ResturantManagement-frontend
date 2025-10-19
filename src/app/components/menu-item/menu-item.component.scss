@@ -60,3 +60,12 @@ button {
     padding: 15px;
   }
 }
+form input,
+form select {
+  font-size: 0.875rem;
+}
+
+form .form-label {
+  font-weight: 500;
+  font-size: 0.85rem;
+}

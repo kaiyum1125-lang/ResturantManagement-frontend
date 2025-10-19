@@ -1,4 +1,154 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+  <div class="container">
+    <!-- Brand Logo -->
+    <a class="navbar-brand d-flex align-items-center" routerLink="/">
+      <img src="assets/logo.png" alt="THE Grill Logo" width="45" height="45" class="me-2 rounded">
+      <span class="fw-bold text-warning">THE GRILL</span>
+    </a>
+
+    <!-- Mobile Toggle Button -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" 
+             routerLink="/" 
+             routerLinkActive="active text-warning" 
+             [routerLinkActiveOptions]="{exact: true}">
+            <i class="bi bi-house-door me-1"></i>Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+             routerLink="/menu" 
+             routerLinkActive="active text-warning">
+            <i class="bi bi-menu-button me-1"></i>Menu
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+             routerLink="/about" 
+             routerLinkActive="active text-warning">
+            <i class="bi bi-info-circle me-1"></i>About
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" 
+             routerLink="/contact" 
+             routerLinkActive="active text-warning">
+            <i class="bi bi-telephone me-1"></i>Contact
+          </a>
+        </li>
+      </ul>
+
+      <!-- Right Side Actions -->
+      <div class="navbar-nav ms-auto">
+        <!-- Search Bar -->
+        <div class="nav-item me-3 d-none d-lg-block">
+          <div class="search-container position-relative">
+            <input type="text" 
+                   class="form-control form-control-sm search-input" 
+                   placeholder="Search menu..."
+                   [(ngModel)]="searchTerm"
+                   (input)="onSearch()">
+            <i class="bi bi-search position-absolute search-icon"></i>
+          </div>
+        </div>
+
+        <!-- Cart Icon -->
+        <div class="nav-item me-3 position-relative">
+          <a class="nav-link text-light" routerLink="/cart">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                  *ngIf="cartItemsCount > 0">
+              {{cartItemsCount}}
+            </span>
+          </a>
+        </div>
+
+        <!-- User/Auth Section -->
+        <div class="nav-item dropdown" *ngIf="isLoggedIn; else loginButton">
+          <a class="nav-link dropdown-toggle text-light d-flex align-items-center" 
+             href="#" 
+             role="button" 
+             data-bs-toggle="dropdown" 
+             aria-expanded="false">
+            <i class="bi bi-person-circle me-2 fs-5"></i>
+            {{userName}}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" routerLink="/profile"><i class="bi bi-person me-2"></i>Profile</a></li>
+            <li><a class="dropdown-item" routerLink="/orders"><i class="bi bi-receipt me-2"></i>My Orders</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+
+        <ng-template #loginButton>
+          <div class="nav-item">
+            <a class="nav-link text-light" routerLink="/login">
+              <i class="bi bi-person me-1"></i>Login
+            </a>
+          </div>
+        </ng-template>
+
+        <!-- Admin Dashboard Button -->
+        <div class="nav-item ms-2">
+          <a class="btn btn-warning btn-sm fw-bold" routerLink="/admin">
+            <i class="bi bi-speedometer2 me-1"></i>Admin
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Search Results Dropdown -->
+<div class="search-results-dropdown position-absolute w-100" *ngIf="showSearchResults && searchTerm">
+  <div class="container">
+    <div class="card search-results-card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6 class="mb-0">Search Results for "{{searchTerm}}"</h6>
+          <button class="btn-close btn-sm" (click)="clearSearch()"></button>
+        </div>
+        
+        <div *ngIf="searchResults.length > 0; else noResults">
+          <div class="search-result-item" 
+               *ngFor="let item of searchResults" 
+               (click)="navigateToMenuItem(item)">
+            <div class="d-flex align-items-center">
+              <img [src]="item.imageUrl || 'assets/default-food.jpg'" 
+                   [alt]="item.name" 
+                   class="search-item-image me-3">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">{{item.name}}</h6>
+                <p class="text-muted small mb-1">{{item.description }}</p>
+                <span class="text-warning fw-bold">${{item.price}}</span>
+              </div>
+              <span class="badge" 
+                    [class.bg-success]="item.available" 
+                    [class.bg-danger]="!item.available">
+                {{item.available ? 'Available' : 'Out of Stock'}}
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <ng-template #noResults>
+          <p class="text-muted text-center mb-0">No items found matching "{{searchTerm}}"</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
   <div class="container">
     <a class="navbar-brand" href="#">
       <img src="assets/logo.png" alt="Restaurant Logo" width="40" class="me-2">
@@ -28,4 +178,4 @@
       </ul>
     </div>
   </div>
-</nav>
+</nav> -->

@@ -1,0 +1,26 @@
+.hero-section {
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+              url('https://images.unsplash.com/photo-1514933651103-005eec06c04b');
+  background-size: cover;
+  background-position: center;
+}
+
+.team-photo {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+.value-icon {
+  i {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover i {
+    transform: scale(1.2);
+  }
+}
+
+.story-section {
+  background-color: #f8f9fa;
+}

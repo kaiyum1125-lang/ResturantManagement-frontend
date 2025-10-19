@@ -1,0 +1,24 @@
+.menu-item-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+}
+
+.btn-group {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  
+  .btn {
+    border-radius: 25px;
+    padding: 0.5rem 1.5rem;
+    
+    &.active {
+      background-color: #ffc107;
+      border-color: #ffc107;
+      color: #000;
+    }
+  }
+}
