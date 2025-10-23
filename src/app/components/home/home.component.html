@@ -1,24 +1,151 @@
-
-<section class="intro-section text-center py-5">
-  <div class="container">
-    <h2 class="mb-3">Welcome to <span class="text-warning">MyRestaurant</span></h2>
-    <p class="lead">Serving delicious meals made with love since 1999</p>
-    <a routerLink="/menu" class="btn btn-warning mt-3">Explore Our Menu</a>
+<!-- Hero Section with Village Theme -->
+<section class="village-hero">
+  <div class="village-container">
+    <div class="village-welcome-sign">
+      <h1 class="village-title">Welcome to <span class="village-name">Rustic Bites</span></h1>
+      <p class="village-tagline">Where Country Charm Meets Culinary Excellence</p>
+      <div class="village-actions">
+        <a routerLink="/menu" class="btn btn-village-primary">
+          <i class="fas fa-utensils me-2"></i>Explore Our Menu
+        </a>
+        <a routerLink="/reservations" class="btn btn-village-secondary">
+          <i class="fas fa-calendar me-2"></i>Book a Table
+        </a>
+      </div>
+    </div>
+    <div class="village-scenery">
+      <div class="village-house"></div>
+      <div class="village-tree"></div>
+      <div class="village-fence"></div>
+    </div>
   </div>
 </section>
 
-
-
-<section class="about-section bg-light py-5">
+<!-- Village Story Section -->
+<section class="village-story py-5">
   <div class="container">
     <div class="row align-items-center">
-      <div class="col-md-6 mb-4 mb-md-0">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRexBia36ixX_U4FoPlg0iqv2hZIvfRyeH8LQ&s" alt="Chef" class="img-fluid rounded shadow">
+      <div class="col-lg-6 mb-4">
+        <div class="village-cabin">
+          <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cmVzdGF1cmFudCUyMGludGVyaW9yfGVufDB8fDB8fHww&w=1000&q=80" 
+               alt="Rustic Restaurant Interior" class="img-fluid rounded-3 village-cabin-img shadow-lg">
+        </div>
       </div>
-      <div class="col-md-6">
-        <h3>About Us</h3>
-        <p>We are committed to bringing you a world-class dining experience. With handpicked ingredients and traditional cooking methods, our chefs create meals that satisfy the soul.</p>
-        <p><strong>Visit us or order online today!</strong></p>
+      <div class="col-lg-6">
+        <div class="village-story-content">
+          <h2 class="section-title">Our Village Heritage</h2>
+          <p class="village-text">
+            Nestled in the heart of tradition, <strong>Rustic Bites</strong> brings you the authentic flavors 
+            of countryside cooking with a modern twist. Our recipes have been passed down through 
+            generations, preserving the soul of village cuisine.
+          </p>
+          <div class="village-features">
+            <div class="feature-item">
+              <i class="fas fa-seedling feature-icon"></i>
+              <span>Farm-to-Table Ingredients</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-fire feature-icon"></i>
+              <span>Wood-Fired Cooking</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-heart feature-icon"></i>
+              <span>Family Recipes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Village Specialties -->
+<section class="village-specialties bg-light py-5">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Village Specialties</h2>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="specialty-card text-center">
+          <div class="specialty-icon">
+            <i class="fas fa-bread-slice"></i>
+          </div>
+          <h4>Artisan Breads</h4>
+          <p>Freshly baked daily using traditional methods and local grains</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="specialty-card text-center">
+          <div class="specialty-icon">
+            <i class="fas fa-drumstick-bite"></i>
+          </div>
+          <h4>Farm Roasts</h4>
+          <p>Slow-roasted meats with herbs from our garden</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="specialty-card text-center">
+          <div class="specialty-icon">
+            <i class="fas fa-cheese"></i>
+          </div>
+          <h4>Local Cheeses</h4>
+          <p>Handcrafted cheeses from nearby dairy farms</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Village Atmosphere -->
+<section class="village-atmosphere py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto text-center">
+        <h2 class="section-title">Experience Country Living</h2>
+        <p class="lead village-text">
+          Step into our warm, rustic space where every meal feels like a celebration 
+          in a countryside village. The crackling fireplace, wooden beams, and friendly 
+          atmosphere await you.
+        </p>
+        <div class="village-stats mt-5">
+          <div class="row">
+            <div class="col-4">
+              <div class="stat-item">
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Years Serving</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Local Suppliers</div>
+              </div>
+            </div>
+            <div class="col-4">
+              <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Homemade</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Village Call to Action -->
+<section class="village-cta py-5">
+  <div class="container text-center">
+    <div class="village-cta-content">
+      <h2>Ready for a Countryside Experience?</h2>
+      <p class="mb-4">Join us for a meal that will transport you to simpler times</p>
+      <div class="cta-buttons">
+        <a routerLink="/menu" class="btn btn-village-cta btn-lg me-3">
+          <i class="fas fa-book-open me-2"></i>View Menu
+        </a>
+        <a routerLink="/contact" class="btn btn-outline-village btn-lg">
+          <i class="fas fa-map-marker-alt me-2"></i>Find Us
+        </a>
       </div>
     </div>
   </div>

@@ -1,0 +1,344 @@
+<div class="cart-container">
+  <!-- Header -->
+  <div class="cart-header bg-warning text-dark py-4">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col">
+          <h1 class="display-6 fw-bold mb-0">
+            <i class="bi bi-cart3 me-2"></i>Your Order
+          </h1>
+        </div>
+        <div class="col-auto">
+          <button class="btn btn-dark" routerLink="/menu">
+            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Content -->
+  <div class="container py-4">
+    <!-- Empty Cart -->
+    <div *ngIf="cartItems.length === 0" class="text-center py-5">
+      <i class="bi bi-cart-x display-1 text-muted mb-3"></i>
+      <h3 class="text-muted">Your cart is empty</h3>
+      <p class="text-muted mb-4">Add some delicious items from our menu</p>
+      <button class="btn btn-warning btn-lg" routerLink="/menu">
+        <i class="bi bi-menu-button me-2"></i>Browse Menu
+      </button>
+    </div>
+
+    <!-- Cart with Items -->
+    <div *ngIf="cartItems.length > 0" class="row">
+      <!-- Cart Items -->
+      <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="bi bi-list-ul me-2"></i>Order Items ({{getTotalItems()}})
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <!-- Cart Item -->
+            <div *ngFor="let item of cartItems" class="cart-item border-bottom">
+              <div class="row align-items-center p-3">
+                <!-- Item Image -->
+                <div class="col-2">
+                  <img [src]="item.imageUrl || 'assets/default-food.jpg'" 
+                       [alt]="item.name"
+                       class="img-fluid rounded"
+                       style="height: 60px; width: 60px; object-fit: cover;">
+                </div>
+                
+                <!-- Item Details -->
+                <div class="col-4">
+                  <h6 class="mb-1">{{item.name}}</h6>
+                  <small class="text-muted">{{item.category?.name}}</small>
+                  <div *ngIf="item.specialInstructions" class="mt-1">
+                    <small class="text-info">
+                      <i class="bi bi-chat-left-text me-1"></i>
+                      {{item.specialInstructions}}
+                    </small>
+                  </div>
+                </div>
+                
+                <!-- Price -->
+                <div class="col-2">
+                  <span class="fw-bold text-warning">${{item.price}}</span>
+                </div>
+                
+                <!-- Quantity Controls -->
+                <div class="col-3">
+                  <div class="quantity-controls d-flex align-items-center">
+                    <button class="btn btn-outline-secondary btn-sm" 
+                            (click)="decreaseQuantity(item)"
+                            [disabled]="item.quantity <= 1">
+                      <i class="bi bi-dash"></i>
+                    </button>
+                    <span class="mx-3 fw-bold">{{item.quantity}}</span>
+                    <button class="btn btn-outline-secondary btn-sm" 
+                            (click)="increaseQuantity(item)">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                <!-- Total and Remove -->
+                <div class="col-1 text-end">
+                  <div class="mb-2">
+                    <strong>${{(item.price * item.quantity).toFixed(2)}}</strong>
+                  </div>
+                  <button class="btn btn-outline-danger btn-sm" 
+                          (click)="removeItem(item)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Special Instructions -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-light">
+            <h6 class="mb-0">
+              <i class="bi bi-chat-left-text me-2"></i>Special Instructions
+            </h6>
+          </div>
+          <div class="card-body">
+            <textarea class="form-control" 
+                      rows="3" 
+                      placeholder="Any special requests or dietary requirements..."
+                      [(ngModel)]="orderNotes"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="col-lg-4">
+        <div class="card shadow-sm sticky-top" style="top: 20px;">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="bi bi-receipt me-2"></i>Order Summary
+            </h5>
+          </div>
+          <div class="card-body">
+            <!-- Summary Details -->
+            <div class="summary-item d-flex justify-content-between mb-2">
+              <span>Subtotal ({{getTotalItems()}} items):</span>
+              <span>${{getSubtotal().toFixed(2)}}</span>
+            </div>
+            
+            <div class="summary-item d-flex justify-content-between mb-2">
+              <span>Tax ({{taxRate * 100}}%):</span>
+              <span>${{getTaxAmount().toFixed(2)}}</span>
+            </div>
+            
+            <div *ngIf="deliveryFee > 0" class="summary-item d-flex justify-content-between mb-2">
+              <span>Delivery Fee:</span>
+              <span>${{deliveryFee.toFixed(2)}}</span>
+            </div>
+            
+            <div *ngIf="discount > 0" class="summary-item d-flex justify-content-between mb-2 text-success">
+              <span>Discount:</span>
+              <span>-${{discount.toFixed(2)}}</span>
+            </div>
+            
+            <hr>
+            
+            <div class="summary-total d-flex justify-content-between mb-3">
+              <strong>Total:</strong>
+              <strong class="text-warning">${{getTotalAmount().toFixed(2)}}</strong>
+            </div>
+
+            <!-- Delivery Option -->
+            <div class="mb-3">
+              <label class="form-label fw-bold">Order Type</label>
+              <div class="form-check">
+                <input class="form-check-input" 
+                       type="radio" 
+                       name="orderType" 
+                       id="dineIn"
+                       [value]="'dine-in'"
+                       [(ngModel)]="orderType">
+                <label class="form-check-label" for="dineIn">
+                  <i class="bi bi-shop me-1"></i>Dine In
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" 
+                       type="radio" 
+                       name="orderType" 
+                       id="takeaway"
+                       [value]="'takeaway'"
+                       [(ngModel)]="orderType">
+                <label class="form-check-label" for="takeaway">
+                  <i class="bi bi-bag me-1"></i>Takeaway
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" 
+                       type="radio" 
+                       name="orderType" 
+                       id="delivery"
+                       [value]="'delivery'"
+                       [(ngModel)]="orderType">
+                <label class="form-check-label" for="delivery">
+                  <i class="bi bi-truck me-1"></i>Delivery
+                </label>
+              </div>
+            </div>
+
+            <!-- Table Number (for dine-in) -->
+            <div *ngIf="orderType === 'dine-in'" class="mb-3">
+              <label class="form-label fw-bold">Table Number</label>
+              <select class="form-select" [(ngModel)]="tableNumber">
+                <option value="">Select Table</option>
+                <option *ngFor="let table of availableTables" [value]="table">
+                  Table {{table}}
+                </option>
+              </select>
+            </div>
+
+            <!-- Checkout Button -->
+            <button class="btn btn-warning w-100 py-3 fw-bold" 
+                    (click)="proceedToCheckout()"
+                    [disabled]="cartItems.length === 0">
+              <i class="bi bi-credit-card me-2"></i>
+              Proceed to Checkout - ${{getTotalAmount().toFixed(2)}}
+            </button>
+
+            <!-- Continue Shopping -->
+            <button class="btn btn-outline-secondary w-100 mt-2" routerLink="/menu">
+              <i class="bi bi-plus-circle me-2"></i>Add More Items
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="checkoutModalLabel">
+          <i class="bi bi-credit-card me-2"></i>Complete Your Order
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Order Review -->
+        <div class="row">
+          <div class="col-md-6">
+            <h6>Order Details</h6>
+            <div *ngFor="let item of cartItems" class="mb-2">
+              <small>{{item.quantity}}x {{item.name}} - ${{(item.price * item.quantity).toFixed(2)}}</small>
+            </div>
+            <div *ngIf="orderNotes" class="mt-2">
+              <small class="text-info">
+                <strong>Notes:</strong> {{orderNotes}}
+              </small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6>Order Summary</h6>
+            <div class="d-flex justify-content-between">
+              <span>Subtotal:</span>
+              <span>${{getSubtotal().toFixed(2)}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Tax:</span>
+              <span>${{getTaxAmount().toFixed(2)}}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span>Delivery:</span>
+              <span>${{deliveryFee.toFixed(2)}}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between fw-bold">
+              <span>Total:</span>
+              <span class="text-warning">${{getTotalAmount().toFixed(2)}}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="mt-4">
+          <h6>Payment Method</h6>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash" [(ngModel)]="paymentMethod">
+            <label class="form-check-label" for="cash">
+              <i class="bi bi-cash-coin me-2"></i>Cash
+            </label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card" [(ngModel)]="paymentMethod">
+            <label class="form-check-label" for="card">
+              <i class="bi bi-credit-card me-2"></i>Credit/Debit Card
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="paymentMethod" id="digital" value="digital" [(ngModel)]="paymentMethod">
+            <label class="form-check-label" for="digital">
+              <i class="bi bi-phone me-2"></i>Digital Wallet
+            </label>
+          </div>
+        </div>
+
+        <!-- Customer Info for Delivery -->
+        <div *ngIf="orderType === 'delivery'" class="mt-4">
+          <h6>Delivery Information</h6>
+          <div class="row">
+            <div class="col-md-6">
+              <input type="text" class="form-control mb-2" placeholder="Full Name" [(ngModel)]="customerName">
+            </div>
+            <div class="col-md-6">
+              <input type="tel" class="form-control mb-2" placeholder="Phone Number" [(ngModel)]="customerPhone">
+            </div>
+            <div class="col-12">
+              <textarea class="form-control" rows="2" placeholder="Delivery Address" [(ngModel)]="deliveryAddress"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-success" (click)="placeOrder()" [disabled]="isPlacingOrder">
+          <span *ngIf="isPlacingOrder" class="spinner-border spinner-border-sm me-2"></span>
+          {{isPlacingOrder ? 'Placing Order...' : 'Place Order'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-check-circle-fill text-success display-1 mb-3"></i>
+        <h4 class="text-success mb-3">Order Placed Successfully!</h4>
+        <p class="text-muted mb-4">Your order #{{orderId}} has been received and is being prepared.</p>
+        <div class="mb-3">
+          <strong>Estimated Time:</strong> 20-30 minutes
+        </div>
+        <div class="d-grid gap-2">
+          <button class="btn btn-warning" routerLink="/menu" data-bs-dismiss="modal">
+            Order Again
+          </button>
+          <button class="btn btn-outline-secondary" routerLink="/" data-bs-dismiss="modal">
+            Back to Home
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

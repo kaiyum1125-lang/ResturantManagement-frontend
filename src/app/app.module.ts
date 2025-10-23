@@ -21,6 +21,7 @@ import { ContactComponent } from './components/contact/contact.component';
 import { AdminMenuComponent } from './features/admin/admin-menu/admin-menu.component';
 import { AdminCategoriesComponent } from './features/admin/admin-categories/admin-categories.component';
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
+import { CartComponent } from './components/cart/cart.component';
 
 @NgModule({
   declarations: [
@@ -41,12 +42,13 @@ import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-
     AdminMenuComponent,
     AdminCategoriesComponent,
     AdminDashboardComponent,
+    CartComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     FormsModule
 
   ],

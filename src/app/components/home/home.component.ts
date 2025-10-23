@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-
+  // You can add any component logic here if needed
+  // For example, animations or dynamic content
 }

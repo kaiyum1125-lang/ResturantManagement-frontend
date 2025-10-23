@@ -14,6 +14,8 @@ import { MenuComponent } from './components/menu/menu.component';
 import { AdminCategoriesComponent } from './features/admin/admin-categories/admin-categories.component';
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
 import { AdminMenuComponent } from './features/admin/admin-menu/admin-menu.component';
+import { CartComponent } from './components/cart/cart.component';
+
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -27,6 +29,7 @@ const routes: Routes = [
   { path: 'menu', component: MenuComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
+   { path: 'cart', component: CartComponent },
 
   // Admin routes
   {
