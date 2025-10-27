@@ -37,7 +37,7 @@
                 <div class="category-header">
                     <h3 class="category-name">{{category.name}}</h3>
                     <div class="category-badge">
-                        {{category.items.length || 0}} items
+                        {{category.items?.length || 0}} items
                     </div>
                 </div>
 
@@ -76,7 +76,7 @@
 
                 <div class="delete-warning" *ngIf="hasItems(category)">
                     <i class="bi bi-exclamation-triangle"></i>
-                    Contains {{category.items.length}} items - cannot delete
+                    Contains {{category.items?.length}} items - cannot delete
                 </div>
             </div>
         </div>
@@ -126,7 +126,7 @@
                             <h4>Category Statistics</h4>
                             <div class="stats-grid">
                                 <div class="stat-item">
-                                    <span class="stat-value">{{selectedCategory.items.length || 0}}</span>
+                                    <span class="stat-value">{{selectedCategory.items?.length || 0}}</span>
                                     <span class="stat-label">Total Items</span>
                                 </div>
                                 <div class="stat-item">

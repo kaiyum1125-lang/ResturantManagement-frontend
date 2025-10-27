@@ -47,7 +47,7 @@
       </ul>
 
       <!-- Right Side Actions -->
-      <div class="navbar-nav ms-auto">
+      <div class="navbar-nav ms-auto align-items-center">
         <!-- Search Bar -->
         <div class="nav-item me-3 d-none d-lg-block">
           <div class="search-container position-relative">
@@ -63,13 +63,14 @@
 
         <!-- Cart Icon -->
         <div class="nav-item me-3 position-relative">
-          <a class="nav-link text-light" routerLink="/cart">
+          <a class="nav-link text-light position-relative" (click)="navigateToCart()" style="cursor: pointer;">
             <i class="bi bi-cart3 fs-5"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
                   *ngIf="cartItemsCount > 0">
               {{cartItemsCount}}
               <span class="visually-hidden">cart items</span>
             </span>
+            <span class="visually-hidden">Cart</span>
           </a>
         </div>
 
@@ -81,32 +82,57 @@
              data-bs-toggle="dropdown" 
              aria-expanded="false">
             <i class="bi bi-person-circle me-2 fs-5"></i>
-            {{userName}}
+            <span class="d-none d-sm-inline">{{userName}}</span>
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" (click)="navigateToProfile()"><i class="bi bi-person me-2"></i>Profile</a></li>
-            <li><a class="dropdown-item" (click)="navigateToOrders()"><i class="bi bi-receipt me-2"></i>My Orders</a></li>
+            <li>
+              <a class="dropdown-item" (click)="navigateToProfile()">
+                <i class="bi bi-person me-2"></i>Profile
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="navigateToOrders()">
+                <i class="bi bi-receipt me-2"></i>My Orders
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="navigateToCart()">
+                <i class="bi bi-cart3 me-2"></i>View Cart
+                <span class="badge bg-warning text-dark ms-2" *ngIf="cartItemsCount > 0">
+                  {{cartItemsCount}}
+                </span>
+              </a>
+            </li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item text-danger" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
-            <li><a class="dropdown-item text-danger" routerLink="/admin"><i class="bi bi-box-arrow-right me-2"></i>Admin</a></li>
-
+            <li *ngIf="userRole === 'admin'">
+              <a class="dropdown-item text-warning" (click)="navigateToAdmin()">
+                <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item text-danger" (click)="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i>Logout
+              </a>
+            </li>
           </ul>
         </div>
 
         <ng-template #authButtons>
           <div class="nav-item d-flex gap-2">
             <button class="btn btn-outline-warning btn-sm" (click)="openAuthModal(true)">
-              <i class="bi bi-box-arrow-in-right me-1"></i>Login
+              <i class="bi bi-box-arrow-in-right me-1"></i>
+              <span class="d-none d-md-inline">Login</span>
             </button>
             <button class="btn btn-warning btn-sm fw-bold" (click)="openAuthModal(false)">
-              <i class="bi bi-person-plus me-1"></i>Sign Up
+              <i class="bi bi-person-plus me-1"></i>
+              <span class="d-none d-md-inline">Sign Up</span>
             </button>
           </div>
         </ng-template>
 
         <!-- Admin Dashboard Button (Visible only for admins) -->
-        <div class="nav-item ms-2" *ngIf="userRole === 'admin'">
-          <a class="btn btn-warning btn-sm fw-bold" routerLink="/admin">
+        <div class="nav-item ms-2 d-none d-lg-block" *ngIf="userRole === 'admin'">
+          <a class="btn btn-warning btn-sm fw-bold" (click)="navigateToAdmin()">
             <i class="bi bi-speedometer2 me-1"></i>Admin
           </a>
         </div>
@@ -116,39 +142,57 @@
 </nav>
 
 <!-- Search Results Dropdown -->
-<div class="search-results-dropdown position-absolute w-100" *ngIf="showSearchResults && searchTerm">
+<div class="search-results-dropdown" *ngIf="showSearchResults && searchTerm">
   <div class="container">
     <div class="card search-results-card">
-      <div class="card-body">
+      <div class="card-body py-3">
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h6 class="mb-0">Search Results for "{{searchTerm}}"</h6>
-          <button class="btn-close btn-sm" (click)="clearSearch()"></button>
+          <h6 class="mb-0 fw-bold text-dark">
+            <i class="bi bi-search me-2 text-warning"></i>
+            Search Results for "{{searchTerm}}"
+          </h6>
+          <button class="btn-close btn-sm" (click)="clearSearch()" aria-label="Close search"></button>
         </div>
         
         <div *ngIf="searchResults.length > 0; else noResults">
           <div class="search-result-item" 
                *ngFor="let item of searchResults" 
                (click)="navigateToMenuItem(item)">
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center py-2">
               <img [src]="item.imageUrl || 'assets/default-food.jpg'" 
                    [alt]="item.name" 
-                   class="search-item-image me-3">
+                   class="search-item-image me-3 rounded"
+                   onerror="this.src='assets/default-food.jpg'">
               <div class="flex-grow-1">
-                <h6 class="mb-1">{{item.name}}</h6>
-                <p class="text-muted small mb-1">{{item.description}}</p>
-                <span class="text-warning fw-bold">${{item.price}}</span>
+                <h6 class="mb-1 fw-bold text-dark">{{item.name}}</h6>
+                <p class="text-muted small mb-1 text-truncate" style="max-width: 300px;">{{item.description}}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                  <span class="text-warning fw-bold">${{item.price}}</span>
+                  <span class="badge small" 
+                        [class.bg-success]="item.available" 
+                        [class.bg-danger]="!item.available">
+                    {{item.available ? 'Available' : 'Out of Stock'}}
+                  </span>
+                </div>
               </div>
-              <span class="badge" 
-                    [class.bg-success]="item.available" 
-                    [class.bg-danger]="!item.available">
-                {{item.available ? 'Available' : 'Out of Stock'}}
-              </span>
+              <i class="bi bi-chevron-right text-muted ms-2"></i>
             </div>
+          </div>
+          
+          <!-- View All Results -->
+          <div class="text-center mt-3 pt-2 border-top">
+            <button class="btn btn-outline-warning btn-sm" (click)="clearSearch()" [routerLink]="['/menu']" [queryParams]="{search: searchTerm}">
+              View All Matching Items
+            </button>
           </div>
         </div>
         
         <ng-template #noResults>
-          <p class="text-muted text-center mb-0">No items found matching "{{searchTerm}}"</p>
+          <div class="text-center py-4">
+            <i class="bi bi-search display-4 text-muted mb-3"></i>
+            <p class="text-muted mb-2">No items found matching "{{searchTerm}}"</p>
+            <p class="text-muted small">Try searching with different keywords</p>
+          </div>
         </ng-template>
       </div>
     </div>
@@ -162,92 +206,182 @@
      *ngIf="showAuthModal" 
      tabindex="-1" 
      aria-labelledby="authModalLabel" 
-     aria-hidden="true">
+     aria-hidden="true"
+     [class.show]="showAuthModal">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="authModalLabel">
-          {{ isLoginMode ? 'Login to Your Account' : 'Create New Account' }}
+    <div class="modal-content border-0 shadow-lg">
+      <!-- Modal Header -->
+      <div class="modal-header bg-dark text-white border-0">
+        <h5 class="modal-title fw-bold" id="authModalLabel">
+          <i class="bi bi-person-circle me-2 text-warning"></i>
+          {{ isLoginMode ? 'Welcome Back!' : 'Join THE GRILL' }}
         </h5>
-        <button type="button" class="btn-close" (click)="closeAuthModal()" aria-label="Close"></button>
+        <button type="button" class="btn-close btn-close-white" (click)="closeAuthModal()" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+      
+      <!-- Modal Body -->
+      <div class="modal-body p-4">
         <!-- Error Message -->
-        <div class="alert alert-danger" *ngIf="authError">
-          {{ authError }}
+        <div class="alert alert-danger d-flex align-items-center" *ngIf="authError">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <span class="small">{{ authError }}</span>
         </div>
 
         <form (ngSubmit)="onSubmitAuth()" #authForm="ngForm">
           <!-- Name Field (Signup only) -->
           <div class="mb-3" *ngIf="!isLoginMode">
-            <label for="name" class="form-label">Full Name</label>
-            <input type="text" 
-                   class="form-control" 
-                   id="name"
-                   [(ngModel)]="authFormData.name" 
-                   name="name"
-                   required
-                   placeholder="Enter your full name">
+            <label for="name" class="form-label fw-semibold">Full Name</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">
+                <i class="bi bi-person text-muted"></i>
+              </span>
+              <input type="text" 
+                     class="form-control border-start-0" 
+                     id="name"
+                     [(ngModel)]="authFormData.name" 
+                     name="name"
+                     required
+                     placeholder="Enter your full name">
+            </div>
           </div>
 
           <!-- Email Field -->
           <div class="mb-3">
-            <label for="email" class="form-label">Email Address</label>
-            <input type="email" 
-                   class="form-control" 
-                   id="email"
-                   [(ngModel)]="authFormData.email" 
-                   name="email"
-                   required
-                   placeholder="Enter your email">
+            <label for="email" class="form-label fw-semibold">Email Address</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">
+                <i class="bi bi-envelope text-muted"></i>
+              </span>
+              <input type="email" 
+                     class="form-control border-start-0" 
+                     id="email"
+                     [(ngModel)]="authFormData.email" 
+                     name="email"
+                     required
+                     placeholder="your.email@example.com">
+            </div>
           </div>
 
           <!-- Password Field -->
           <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" 
-                   class="form-control" 
-                   id="password"
-                   [(ngModel)]="authFormData.password" 
-                   name="password"
-                   required
-                   [minlength]="isLoginMode ? 1 : 6"
-                   placeholder="{{ isLoginMode ? 'Enter your password' : 'Create a password (min. 6 characters)' }}">
+            <label for="password" class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">
+                <i class="bi bi-lock text-muted"></i>
+              </span>
+              <input type="password" 
+                     class="form-control border-start-0" 
+                     id="password"
+                     [(ngModel)]="authFormData.password" 
+                     name="password"
+                     required
+                     [minlength]="isLoginMode ? 1 : 6"
+                     [placeholder]="isLoginMode ? 'Enter your password' : 'Create a strong password'">
+            </div>
+            <div class="form-text" *ngIf="!isLoginMode">
+              <i class="bi bi-info-circle me-1"></i>
+              Password must be at least 6 characters long
+            </div>
           </div>
 
           <!-- Confirm Password (Signup only) -->
-          <div class="mb-3" *ngIf="!isLoginMode">
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
-            <input type="password" 
-                   class="form-control" 
-                   id="confirmPassword"
-                   [(ngModel)]="authFormData.confirmPassword" 
-                   name="confirmPassword"
-                   required
-                   placeholder="Confirm your password">
+          <div class="mb-4" *ngIf="!isLoginMode">
+            <label for="confirmPassword" class="form-label fw-semibold">Confirm Password</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-end-0">
+                <i class="bi bi-lock-fill text-muted"></i>
+              </span>
+              <input type="password" 
+                     class="form-control border-start-0" 
+                     id="confirmPassword"
+                     [(ngModel)]="authFormData.confirmPassword" 
+                     name="confirmPassword"
+                     required
+                     placeholder="Confirm your password">
+            </div>
           </div>
 
           <!-- Submit Button -->
           <button type="submit" 
-                  class="btn btn-warning w-100 mb-3" 
-                  [disabled]="isLoading">
-            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
-            {{ isLoading ? 'Please wait...' : (isLoginMode ? 'Login' : 'Create Account') }}
+                  class="btn btn-warning w-100 py-2 mb-3 fw-bold" 
+                  [disabled]="isLoading"
+                  [class]="isLoading ? 'btn-warning opacity-75' : 'btn-warning'">
+            <span *ngIf="isLoading">
+              <span class="spinner-border spinner-border-sm me-2"></span>
+              Processing...
+            </span>
+            <span *ngIf="!isLoading">
+              <i class="bi" [class.bi-box-arrow-in-right]="isLoginMode" [class.bi-person-plus]="!isLoginMode" class="me-2"></i>
+              {{ isLoginMode ? 'Sign In' : 'Create Account' }}
+            </span>
           </button>
 
           <!-- Switch Mode -->
           <div class="text-center">
-            <p class="mb-0">
+            <p class="mb-0 text-muted">
               {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
               <a href="javascript:void(0)" 
-                 class="text-warning text-decoration-none" 
+                 class="text-warning text-decoration-none fw-semibold" 
                  (click)="switchAuthMode()">
-                {{ isLoginMode ? 'Sign up' : 'Login' }}
+                {{ isLoginMode ? 'Sign up now' : 'Sign in here' }}
               </a>
             </p>
+          </div>
+
+          <!-- Divider -->
+          <div class="position-relative text-center my-3">
+            <hr class="border-muted">
+            <span class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-muted small">or</span>
+          </div>
+
+          <!-- Guest Option -->
+          <div class="text-center">
+            <button type="button" class="btn btn-outline-secondary btn-sm" (click)="closeAuthModal()">
+              <i class="bi bi-arrow-right me-1"></i>
+              Continue as Guest
+            </button>
           </div>
         </form>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Mobile Search Overlay -->
+<div class="d-lg-none">
+  <div class="collapse" id="mobileSearch">
+    <div class="p-3 bg-dark">
+      <div class="search-container position-relative">
+        <input type="text" 
+               class="form-control search-input" 
+               placeholder="Search menu items..."
+               [(ngModel)]="searchTerm"
+               (input)="onSearch()"
+               (focus)="onSearch()">
+        <i class="bi bi-search position-absolute search-icon"></i>
+        <button class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-2" 
+                data-bs-toggle="collapse" 
+                data-bs-target="#mobileSearch"
+                aria-label="Close search"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mobile Search Toggle -->
+<div class="d-lg-none fixed-bottom p-3 bg-dark border-top" *ngIf="!isLoggedIn">
+  <div class="d-flex justify-content-between align-items-center">
+    <button class="btn btn-outline-warning btn-sm flex-grow-1 me-2" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#mobileSearch">
+      <i class="bi bi-search me-1"></i> Search Menu
+    </button>
+    <button class="btn btn-warning btn-sm" (click)="navigateToCart()">
+      <i class="bi bi-cart3"></i>
+      <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" 
+            *ngIf="cartItemsCount > 0">
+        {{cartItemsCount}}
+      </span>
+    </button>
   </div>
 </div>

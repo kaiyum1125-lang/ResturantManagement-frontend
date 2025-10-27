@@ -1,70 +1,168 @@
 <app-sidebar></app-sidebar>
 
-<div class="main-content" style="margin-left: 250px; padding: 20px; min-height: 100vh; background-color: #f8f9fa;">
-  <div class="container">
+<div class="main-content">
+  <div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="page-header">
+          <h2 class="text-success mb-2">
+            <i class="fas fa-utensils me-2"></i>
+            মেনু আইটেম ম্যানেজমেন্ট
+          </h2>
+          <p class="text-muted">আপনার রেস্টুরেন্টের মেনু আইটেমগুলো ম্যানেজ করুন</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Messages -->
+    <div class="row mb-3" *ngIf="alertMessage">
+      <div class="col-12">
+        <div class="alert" [ngClass]="alertType" role="alert">
+          {{ alertMessage }}
+          <button type="button" class="btn-close" (click)="clearAlert()"></button>
+        </div>
+      </div>
+    </div>
+
     <!-- Form Section -->
-    <form #formRef [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="card p-4 shadow-sm mb-4">
-      <h5 class="mb-3">{{ itemForm.value.id ? 'Edit Item' : 'Add Item' }}</h5>
+    <div class="row">
+      <div class="col-lg-5">
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="menu-form-card">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+              {{ isEditMode ? 'আইটেম এডিট করুন' : 'নতুন আইটেম যোগ করুন' }}
+            </h5>
+          </div>
+          <div class="card-body">
 
-      <div class="mb-3">
-        <label for="name" class="form-label">Item Name</label>
-        <input id="name" formControlName="name" class="form-control" placeholder="Enter item name" />
+            <!-- Name Field -->
+            <div class="mb-3">
+              <label class="form-label">আইটেমের নাম *</label>
+              <input formControlName="name" class="form-control" placeholder="আইটেমের নাম লিখুন">
+              <div class="text-danger small" *ngIf="showFieldError('name')">
+                আইটেমের নাম প্রয়োজন
+              </div>
+            </div>
+
+            <!-- Description Field -->
+            <div class="mb-3">
+              <label class="form-label">বিবরণ</label>
+              <textarea formControlName="description" class="form-control" rows="3"
+                placeholder="আইটেমের বিবরণ লিখুন"></textarea>
+            </div>
+
+            <!-- Price Field -->
+            <div class="mb-3">
+              <label class="form-label">দাম *</label>
+              <div class="input-group">
+                <span class="input-group-text">৳</span>
+                <input formControlName="price" type="number" class="form-control" placeholder="দাম লিখুন" min="1">
+              </div>
+              <div class="text-danger small" *ngIf="showFieldError('price')">
+                বৈধ দাম লিখুন
+              </div>
+            </div>
+
+            <!-- Category Field - SIMPLIFIED WORKING VERSION -->
+            <div class="mb-3">
+              <label class="form-label">ক্যাটাগরি *</label>
+              <select formControlName="category" class="form-select">
+                <option [ngValue]="null" selected>ক্যাটাগরি নির্বাচন করুন</option>
+                <option *ngFor="let cat of categories" [ngValue]="cat">
+                  {{ cat.name }}
+                </option>
+              </select>
+              <div class="text-danger small" *ngIf="showFieldError('category')">
+                দয়া করে একটি ক্যাটাগরি নির্বাচন করুন
+              </div>
+            </div>
+
+            <!-- Image URL Field -->
+            <div class="mb-3">
+              <label class="form-label">ছবির URL</label>
+              <input formControlName="imageUrl" class="form-control" placeholder="ছবির URL লিখুন (ঐচ্ছিক)">
+            </div>
+
+            <!-- Availability Toggle -->
+            <div class="mb-4">
+              <label class="form-label">স্ট্যাটাস</label>
+              <div class="form-check form-switch">
+                <input type="checkbox" class="form-check-input" formControlName="available">
+                <label class="form-check-label">
+                  {{ itemForm.get('available')?.value ? 'সচল' : 'অচল' }}
+                </label>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-success btn-lg">
+                {{ isEditMode ? 'আপডেট করুন' : 'সংরক্ষণ করুন' }}
+              </button>
+
+              <button type="button" class="btn btn-outline-secondary" (click)="resetForm()" *ngIf="isEditMode">
+                বাতিল করুন
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
 
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <input id="description" formControlName="description" class="form-control" placeholder="Enter description" />
+      <!-- Table Section -->
+      <div class="col-lg-7">
+        <div class="menu-table-card">
+          <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">
+              মেনু আইটেম তালিকা ({{ items.length }})
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>নাম</th>
+                    <th>দাম</th>
+                    <th>ক্যাটাগরি</th>
+                    <th>স্ট্যাটাস</th>
+                    <th class="text-center">একশন</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of items">
+                    <td>
+                      <strong>{{ item.name }}</strong>
+                      <small class="d-block text-muted">{{ item.description }}</small>
+                    </td>
+                    <td>{{ item.price | currency:'BDT ' }}</td>
+                    <td>{{ item.category?.name }}</td>
+                    <td>
+                      <span class="badge" [class.bg-success]="item.available" [class.bg-danger]="!item.available">
+                        {{ item.available ? 'সচল' : 'অচল' }}
+                      </span>
+                    </td>
+                    <td class="text-center">
+                      <button class="btn btn-sm btn-warning me-1" (click)="editItem(item)">
+                        এডিট
+                      </button>
+                      <button class="btn btn-sm btn-danger" (click)="deleteItem(item.id!)">
+                        ডিলিট
+                      </button>
+                    </td>
+                  </tr>
+
+                  <tr *ngIf="items.length === 0">
+                    <td colspan="5" class="text-center py-4 text-muted">
+                      কোন আইটেম খুঁজে পাওয়া যায়নি
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <div class="mb-3">
-        <label for="price" class="form-label">Price</label>
-        <input id="price" formControlName="price" type="number" class="form-control" placeholder="Enter price" />
-      </div>
-
-      <div class="mb-3">
-        <label for="category" class="form-label">Category</label>
-        <select id="category" formControlName="category" class="form-select">
-          <option [ngValue]="null" disabled>Select a category</option>
-          <option *ngFor="let cat of categories" [ngValue]="cat">{{ cat.name }}</option>
-        </select>
-      </div>
-
-      <div class="form-check mb-3">
-        <input type="checkbox" id="available" class="form-check-input" formControlName="available" />
-        <label for="available" class="form-check-label">Available</label>
-      </div>
-
-      <button type="submit" class="btn btn-primary w-100">
-        {{ itemForm.value.id ? 'Update' : 'Save' }}
-      </button>
-    </form>
-
-    <!-- Table Section -->
-    <h3 class="mb-3">Item List</h3>
-    <div class="table-responsive">
-      <table class="table table-bordered table-hover bg-white shadow-sm">
-        <thead class="table-light">
-          <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>Category</th>
-            <th colspan="2" class="text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of items">
-            <td>{{ item.name }}</td>
-            <td>{{ item.price | currency:'USD' }}</td>
-            <td>{{ item.category.name }}</td>
-            <td>
-              <button class="btn btn-sm btn-warning" (click)="edit(item)">Edit</button>
-            </td>
-            <td>
-              <button class="btn btn-sm btn-danger" (click)="delete(item.id!)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </div>

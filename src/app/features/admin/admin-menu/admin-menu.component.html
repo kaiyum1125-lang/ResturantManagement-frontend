@@ -68,7 +68,7 @@
           <span class="badge" [ngClass]="item.available ? 'available' : 'unavailable'">
             {{item.available ? 'Available' : 'Unavailable'}} 
           </span>
-          <span class="badge category">{{item.category.name}}</span>
+          <span class="badge category">{{item.category?.name}}</span>
         </div>
       </div>
 

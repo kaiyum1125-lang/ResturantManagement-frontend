@@ -1,106 +1,279 @@
 <div class="menu-container">
-  <!-- Header -->
-  <div class="text-center py-4 bg-light">
-    <div class="container">
-      <h1 class="display-5 text-warning mb-2">Our Menu</h1>
-      <p class="lead text-muted">Discover our delicious offerings</p>
+
+  
+
+<!-- Compact Professional Header Section with Scrollable Categories -->
+<div class="bg-white border-bottom py-3">
+  <div class="container">
+    <!-- Compact Title Row -->
+    <div class="row align-items-center mb-3">
+      <div class="col-md-4">
+        <h4 class="text-warning mb-0 fw-bold">
+          <i class="bi bi-egg-fried me-2"></i>মেনু
+        </h4>
+        <small class="text-muted">বাংলাদেশী খাবারের সংগ্রহ</small>
+      </div>
       
-      <!-- Search Bar -->
-      <div class="row justify-content-center mb-3">
-        <div class="col-md-6">
-          <div class="input-group">
-            <span class="input-group-text bg-warning border-warning">
-              <i class="bi bi-search"></i>
+      <div class="col-md-5">
+        <!-- Compact Search Bar -->
+        <div class="input-group shadow-sm">
+          <span class="input-group-text bg-white border-end-0 text-muted">
+            <i class="bi bi-search"></i>
+          </span>
+          <input type="text" 
+                 class="form-control border-start-0" 
+                 placeholder="খাবার সার্চ করুন..."
+                 [(ngModel)]="searchTerm"
+                 (input)="applyFilters()">
+          <button *ngIf="searchTerm" 
+                  class="btn btn-outline-secondary border-start-0" 
+                  type="button"
+                  (click)="clearSearch()">
+            <i class="bi bi-x"></i>
+          </button>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <!-- Sort Options - Compact -->
+        <div class="d-flex align-items-center justify-content-end">
+          <span class="text-muted small me-2">
+            <i class="bi bi-sort-down"></i>
+          </span>
+          <select class="form-select form-select-sm w-auto" 
+                  [(ngModel)]="sortBy" 
+                  (change)="onSortChange(sortBy)">
+            <option value="name">নাম</option>
+            <option value="price-low">দাম ↑</option>
+            <option value="price-high">দাম ↓</option>
+            <option value="popular">জনপ্রিয়</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Category Filter Row -->
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <div class="d-flex align-items-center">
+          <span class="text-muted small me-3 fw-medium flex-shrink-0">ক্যাটাগরি:</span>
+          
+          <!-- Scrollable Category Container -->
+          <div class="category-scroll-container flex-grow-1">
+            <div class="category-scroll-wrapper">
+              <div class="category-buttons d-flex gap-1">
+                <button type="button" 
+                        class="btn btn-sm rounded-pill px-3 py-1 flex-shrink-0" 
+                        [class.btn-warning]="selectedCategory === null"
+                        [class.btn-outline-warning]="selectedCategory !== null"
+                        (click)="filterByCategory(null)">
+                  সব আইটেম
+                </button>
+                <button *ngFor="let category of categories" 
+                        type="button" 
+                        class="btn btn-sm rounded-pill px-3 py-1 flex-shrink-0"
+                        [class.btn-warning]="selectedCategory?.id === category.id"
+                        [class.btn-outline-warning]="selectedCategory?.id !== category.id"
+                        (click)="filterByCategory(category)">
+                  {{category.name}}
+                </button>
+              </div>
+            </div>
+            
+            <!-- Scroll Indicators -->
+            <div class="scroll-indicators">
+              <button class="scroll-btn scroll-left" (click)="scrollCategories(-100)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="scroll-btn scroll-right" (click)="scrollCategories(100)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 text-end">
+        <!-- Clear Filters Button - Compact -->
+        <button *ngIf="selectedCategory || searchTerm || sortBy !== 'name'" 
+                class="btn btn-outline-secondary btn-sm"
+                (click)="clearFilters()">
+          <i class="bi bi-arrow-clockwise me-1"></i>রিসেট
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <!-- Error Message Section -->
+  <div *ngIf="error" class="container mt-4">
+    <div class="alert alert-danger d-flex align-items-center shadow-sm" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+      <div class="flex-grow-1">
+        <h5 class="alert-heading mb-1">ডেটা লোড করতে সমস্যা!</h5>
+        <p class="mb-0">{{ error }}</p>
+      </div>
+      <button class="btn btn-outline-danger btn-sm" (click)="retryLoad()">
+        <i class="bi bi-arrow-repeat me-1"></i>আবার চেষ্টা করুন
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content Section -->
+  <div class="container py-4">
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-warning" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">লোড হচ্ছে...</span>
+      </div>
+      <p class="mt-3 text-muted fs-5">
+        <i class="bi bi-egg-fried me-2"></i>মেনু প্রস্তুত করা হচ্ছে...
+      </p>
+    </div>
+
+    <!-- Menu Items Grid -->
+    <div *ngIf="!isLoading && !error" class="row g-4">
+      
+      <!-- Item Count -->
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <p class="text-muted mb-0">
+            <strong>{{filteredItems.length}}</strong>টি আইটেম পাওয়া গেছে
+            <span *ngIf="selectedCategory" class="text-warning">
+              - {{selectedCategory.name}}
             </span>
-            <input type="text" 
-                   class="form-control" 
-                   placeholder="Search menu items..."
-                   [(ngModel)]="searchTerm"
-                   (input)="applyFilters()">
-            <button *ngIf="searchTerm" 
-                    class="btn btn-outline-secondary" 
-                    type="button"
-                    (click)="clearSearch()">
-              Clear
-            </button>
+          </p>
+          <div class="d-flex gap-2">
+            <!-- View Toggle (Optional) -->
+            <div class="btn-group btn-group-sm" role="group">
+              <button type="button" class="btn btn-outline-warning active">
+                <i class="bi bi-grid-3x3-gap"></i>
+              </button>
+              <button type="button" class="btn btn-outline-warning">
+                <i class="bi bi-list"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Category Filter -->
-      <div class="mb-3">
-        <div class="d-flex flex-wrap justify-content-center gap-2">
-          <button type="button" 
-                  class="btn btn-sm" 
-                  [class.btn-warning]="selectedCategory === null"
-                  [class.btn-outline-warning]="selectedCategory !== null"
-                  (click)="filterByCategory(null)">
-            All
-          </button>
-          <button *ngFor="let category of categories" 
-                  type="button" 
-                  class="btn btn-sm"
-                  [class.btn-warning]="selectedCategory?.id === category.id"
-                  [class.btn-outline-warning]="selectedCategory?.id !== category.id"
-                  (click)="filterByCategory(category)">
-            {{category.name}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+      <!-- Menu Items -->
+      <div *ngFor="let item of filteredItems" class="col-md-6 col-lg-4 col-xl-3">
+        <div class="card menu-card h-100 shadow-sm border-0 hover-lift">
+          <!-- Item Image with Overlay Badges -->
+          <div class="position-relative overflow-hidden">
+            <img [src]="item.imageUrl" 
+                 class="card-img-top" 
+                 [alt]="item.name"
+                 (error)="handleImageError($event)"
+                 style="height: 200px; object-fit: cover; transition: transform 0.3s ease;">
+            
+            <!-- Image Overlay -->
+            <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-3">
+              
+              <!-- Top Badges -->
+              <div class="d-flex justify-content-between align-items-start">
+                <!-- Popular Badge -->
+                <span *ngIf="item.isPopular" class="badge bg-warning text-dark shadow-sm">
+                  <i class="bi bi-star-fill me-1"></i>জনপ্রিয়
+                </span>
+                
+                <!-- Spicy Badge -->
+                <span *ngIf="item.isSpicy" class="badge bg-danger text-white shadow-sm">
+                  <i class="bi bi-fire me-1"></i>ঝাল
+                </span>
+              </div>
 
-  <!-- Menu Items -->
-  <div class="container py-4">
-    <!-- Loading -->
-    <div *ngIf="isLoading" class="text-center py-5">
-      <div class="spinner-border text-warning" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-      <p class="mt-2 text-muted">Loading menu...</p>
-    </div>
-
-    <!-- Menu Grid -->
-    <div *ngIf="!isLoading" class="row g-3">
-      <div *ngFor="let item of filteredItems" class="col-md-6 col-lg-4">
-        <div class="card menu-card h-100">
-          <img [src]="item.imageUrl || 'assets/default-food.jpg'" 
-               class="card-img-top" 
-               [alt]="item.name"
-               (error)="handleImageError($event)"
-               style="height: 200px; object-fit: cover;">
-          
-          <div class="card-body d-flex flex-column">
-            <!-- Header -->
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title mb-0">{{item.name}}</h5>
-              <span class="badge" 
-                    [class.bg-success]="item.available" 
-                    [class.bg-danger]="!item.available">
-                {{item.available ? 'Available' : 'Sold Out'}}
-              </span>
+              <!-- Bottom Badges -->
+              <div class="d-flex justify-content-between align-items-end">
+                <!-- Cooking Time -->
+                <span class="badge bg-dark bg-opacity-75 text-white">
+                  <i class="bi bi-clock me-1"></i>{{getCookingTimeText(item)}}
+                </span>
+                
+                <!-- Availability Badge -->
+                <span class="badge" 
+                      [class.bg-success]="item.available" 
+                      [class.bg-secondary]="!item.available">
+                  {{item.available ? 'উপলব্ধ' : 'অনুপলব্ধ'}}
+                </span>
+              </div>
             </div>
 
-            <!-- Category -->
+            <!-- Sold Out Overlay -->
+            <div *ngIf="!item.available" class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center">
+              <span class="badge bg-danger fs-6 py-2 px-3">
+                <i class="bi bi-x-circle me-1"></i>সোল্ড আউট
+              </span>
+            </div>
+          </div>
+          
+          <!-- Card Body -->
+          <div class="card-body d-flex flex-column p-3">
+            
+            <!-- Item Header -->
             <div class="mb-2">
-              <small class="text-muted">
-                <i class="bi bi-tag me-1"></i>{{item.category?.name}}
-              </small>
+              <h5 class="card-title mb-1 text-dark fs-6 fw-bold line-clamp-2" style="min-height: 3rem;">
+                {{item.name}}
+              </h5>
+              
+              <!-- Category -->
+              <div class="mb-2">
+                <small class="text-muted">
+                  <i class="bi bi-tag-fill me-1 text-warning"></i>
+                  {{item.category?.name}}
+                </small>
+              </div>
             </div>
 
             <!-- Description -->
-            <p class="card-text text-muted small flex-grow-1">
+            <p class="card-text text-muted small flex-grow-1 mb-3 line-clamp-3" style="min-height: 4rem;">
               {{item.description}}
             </p>
 
-            <!-- Price and Add to Cart -->
-            <div class="d-flex justify-content-between align-items-center mt-auto">
-              <span class="h5 text-warning mb-0">${{item.price}}</span>
-              <button class="btn btn-warning btn-sm" 
-                      (click)="addToCart(item)"
-                      [disabled]="!item.available">
-                <i class="bi bi-cart-plus me-1"></i>
-                Add to Cart
+            <!-- Price and Action Section -->
+            <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+              <!-- Price -->
+              <div>
+                <span class="h5 text-warning mb-0 fw-bold">৳{{item.price}}</span>
+                <small class="text-muted d-block">প্রতি পিস</small>
+              </div>
+              
+              <!-- Add to Cart Button -->
+              <button class="btn btn-warning rounded-pill px-3" 
+                      (click)="addToCart(item, $event)"
+                      [disabled]="!item.available || addingToCart[item.id]"
+                      [class.btn-success]="addingToCart[item.id]"
+                      [class.btn-secondary]="!item.available">
+                
+                <!-- Loading State -->
+                <span *ngIf="addingToCart[item.id]" class="spinner-border spinner-border-sm me-1"></span>
+                
+                <!-- Icons -->
+                <i *ngIf="!addingToCart[item.id] && item.available" class="bi bi-cart-plus me-1"></i>
+                <i *ngIf="!item.available" class="bi bi-slash-circle me-1"></i>
+                
+                <!-- Text -->
+                {{ addingToCart[item.id] ? 'যোগ হচ্ছে...' : 
+                   (item.available ? 'কার্টে যোগ করুন' : 'অনুপলব্ধ') }}
+              </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <button class="btn btn-outline-secondary btn-sm" title="পছন্দ করুন">
+                <i class="bi bi-heart"></i>
+              </button>
+              
+              <button class="btn btn-outline-secondary btn-sm" title="শেয়ার করুন">
+                <i class="bi bi-share"></i>
+              </button>
+              
+              <button class="btn btn-outline-secondary btn-sm" title="বিস্তারিত দেখুন">
+                <i class="bi bi-eye"></i>
               </button>
             </div>
           </div>
@@ -109,13 +282,51 @@
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!isLoading && filteredItems.length === 0" class="text-center py-5">
-      <i class="bi bi-search display-1 text-muted mb-3"></i>
-      <h4 class="text-muted">No items found</h4>
-      <p class="text-muted">Try a different search or category</p>
-      <button class="btn btn-warning" (click)="clearFilters()">
-        Show All Items
+    <div *ngIf="!isLoading && !error && filteredItems.length === 0" class="text-center py-5">
+      <div class="empty-state">
+        <i class="bi bi-search display-1 text-muted mb-3"></i>
+        <h4 class="text-muted mb-3">কোনো আইটেম পাওয়া যায়নি</h4>
+        <p class="text-muted mb-4">আপনার সার্চ বা ক্যাটাগরির সাথে মিলছে না। অন্য কিছু চেষ্টা করুন।</p>
+        
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+          <button class="btn btn-warning" (click)="clearFilters()">
+            <i class="bi bi-list-ul me-1"></i>সব আইটেম দেখুন
+          </button>
+          <button class="btn btn-outline-warning" (click)="loadMenuData()">
+            <i class="bi bi-arrow-repeat me-1"></i>রিফ্রেশ করুন
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load More Button (Optional) -->
+    <div *ngIf="!isLoading && !error && filteredItems.length > 0" class="text-center mt-5">
+      <button class="btn btn-outline-warning rounded-pill px-4">
+        <i class="bi bi-arrow-down me-1"></i>আরো আইটেম লোড করুন
       </button>
+    </div>
+  </div>
+
+  <!-- Footer Section -->
+  <div class="bg-light border-top mt-5">
+    <div class="container py-4">
+      <div class="row text-center">
+        <div class="col-md-4 mb-3 mb-md-0">
+          <i class="bi bi-truck text-warning fs-2 mb-2"></i>
+          <h6>দ্রুত ডেলিভারি</h6>
+          <small class="text-muted">৩০-৪৫ মিনিটের মধ্যে হোম ডেলিভারি</small>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+          <i class="bi bi-shield-check text-warning fs-2 mb-2"></i>
+          <h6>গুণগত মান</h6>
+          <small class="text-muted">তাজা উপাদানে তৈরি খাবার</small>
+        </div>
+        <div class="col-md-4">
+          <i class="bi bi-telephone text-warning fs-2 mb-2"></i>
+          <h6>২৪/৭ সাপোর্ট</h6>
+          <small class="text-muted">যোগাযোগ: ০১৭০০-০০০০০০</small>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { MenuCategory } from './menu-category.service';
+import { MenuCategory } from './menu.service';
+// import { MenuCategory } from './menu-category.service';
 
 @Injectable({
   providedIn: 'root'

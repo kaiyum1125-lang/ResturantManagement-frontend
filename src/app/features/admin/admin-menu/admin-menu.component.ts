@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from 'src/app/services/category.service';
-import { MenuCategory } from 'src/app/services/menu-category.service';
-import { MenuItem } from 'src/app/services/menu-item.service';
-import { MenuService } from 'src/app/services/menu.service';
+import { MenuCategory, MenuItem, MenuService } from 'src/app/services/menu.service';
 
 
 @Component({

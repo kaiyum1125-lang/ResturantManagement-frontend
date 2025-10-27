@@ -1,26 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MenuItem } from './menu-item.service';
+import { MenuCategory } from './menu.service';
 
 // export interface MenuCategory {
 //   id?: number;
 //   name: string;
 // }
 
-export interface MenuCategory {
-createdAt: any;
-  id: number;
-  name: string;
-  description: string;
-  items: MenuItem[];
-}
+// export interface MenuCategory {
+// createdAt: any;
+//   id: number;
+//   name: string;
+//   description: string;
+//   items: MenuItem[];
+// }
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuCategoryService {
-  private baseUrl = 'http://localhost:8080/api/categories';
+  private baseUrl = 'http://localhost:8080/api/menu-categories';
 
   constructor(private http: HttpClient) {}
 

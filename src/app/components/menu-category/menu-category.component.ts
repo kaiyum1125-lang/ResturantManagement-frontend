@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MenuCategoryService, MenuCategory } from 'src/app/services/menu-category.service';
+import { MenuCategoryService } from 'src/app/services/menu-category.service';
+import { MenuCategory } from 'src/app/services/menu.service';
 
 @Component({
   selector: 'app-menu-category',
