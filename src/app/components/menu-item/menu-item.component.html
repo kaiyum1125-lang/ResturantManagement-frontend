@@ -8,9 +8,9 @@
         <div class="page-header">
           <h2 class="text-success mb-2">
             <i class="fas fa-utensils me-2"></i>
-            মেনু আইটেম ম্যানেজমেন্ট
+            Menu Item Management
           </h2>
-          <p class="text-muted">আপনার রেস্টুরেন্টের মেনু আইটেমগুলো ম্যানেজ করুন</p>
+          <p class="text-muted">Manage your restaurant's menu items</p>
         </div>
       </div>
     </div>
@@ -19,6 +19,8 @@
     <div class="row mb-3" *ngIf="alertMessage">
       <div class="col-12">
         <div class="alert" [ngClass]="alertType" role="alert">
+          <i class="bi" [class.bi-check-circle]="alertType === 'alert-success'" 
+                      [class.bi-exclamation-triangle]="alertType === 'alert-danger'"></i>
           {{ alertMessage }}
           <button type="button" class="btn-close" (click)="clearAlert()"></button>
         </div>
@@ -31,78 +33,94 @@
         <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="menu-form-card">
           <div class="card-header bg-success text-white">
             <h5 class="mb-0">
-              {{ isEditMode ? 'আইটেম এডিট করুন' : 'নতুন আইটেম যোগ করুন' }}
+              <i class="bi" [class.bi-pencil]="isEditMode" [class.bi-plus]="!isEditMode"></i>
+              {{ isEditMode ? 'Edit Menu Item' : 'Add New Menu Item' }}
             </h5>
           </div>
           <div class="card-body">
 
             <!-- Name Field -->
             <div class="mb-3">
-              <label class="form-label">আইটেমের নাম *</label>
-              <input formControlName="name" class="form-control" placeholder="আইটেমের নাম লিখুন">
-              <div class="text-danger small" *ngIf="showFieldError('name')">
-                আইটেমের নাম প্রয়োজন
+              <label class="form-label">Item Name *</label>
+              <input type="text" formControlName="name" class="form-control" 
+                     placeholder="Enter item name"
+                     [class.is-invalid]="showFieldError('name')">
+              <div class="invalid-feedback" *ngIf="showFieldError('name')">
+                <div *ngIf="name?.errors?.['required']">Item name is required</div>
+                <div *ngIf="name?.errors?.['minlength']">Item name must be at least 2 characters</div>
               </div>
             </div>
 
             <!-- Description Field -->
             <div class="mb-3">
-              <label class="form-label">বিবরণ</label>
+              <label class="form-label">Description</label>
               <textarea formControlName="description" class="form-control" rows="3"
-                placeholder="আইটেমের বিবরণ লিখুন"></textarea>
+                        placeholder="Enter item description"></textarea>
             </div>
 
             <!-- Price Field -->
             <div class="mb-3">
-              <label class="form-label">দাম *</label>
+              <label class="form-label">Price *</label>
               <div class="input-group">
-                <span class="input-group-text">৳</span>
-                <input formControlName="price" type="number" class="form-control" placeholder="দাম লিখুন" min="1">
+                <span class="input-group-text">$</span>
+                <input type="number" formControlName="price" class="form-control" 
+                       placeholder="Enter price" min="1"
+                       [class.is-invalid]="showFieldError('price')">
               </div>
-              <div class="text-danger small" *ngIf="showFieldError('price')">
-                বৈধ দাম লিখুন
+              <div class="invalid-feedback" *ngIf="showFieldError('price')">
+                <div *ngIf="price?.errors?.['required']">Price is required</div>
+                <div *ngIf="price?.errors?.['min']">Price must be at least $1</div>
               </div>
             </div>
 
-            <!-- Category Field - SIMPLIFIED WORKING VERSION -->
+            <!-- Category Field -->
             <div class="mb-3">
-              <label class="form-label">ক্যাটাগরি *</label>
-              <select formControlName="category" class="form-select">
-                <option [ngValue]="null" selected>ক্যাটাগরি নির্বাচন করুন</option>
+              <label class="form-label">Category *</label>
+              <select formControlName="category" class="form-select"
+                      [class.is-invalid]="showFieldError('category')">
+                <option [ngValue]="null" selected>Select a category</option>
                 <option *ngFor="let cat of categories" [ngValue]="cat">
                   {{ cat.name }}
                 </option>
               </select>
-              <div class="text-danger small" *ngIf="showFieldError('category')">
-                দয়া করে একটি ক্যাটাগরি নির্বাচন করুন
+              <div class="invalid-feedback" *ngIf="showFieldError('category')">
+                Please select a category
               </div>
             </div>
 
             <!-- Image URL Field -->
             <div class="mb-3">
-              <label class="form-label">ছবির URL</label>
-              <input formControlName="imageUrl" class="form-control" placeholder="ছবির URL লিখুন (ঐচ্ছিক)">
+              <label class="form-label">Image URL</label>
+              <input type="text" formControlName="imageUrl" class="form-control" 
+                     placeholder="Enter image URL (optional)">
             </div>
 
             <!-- Availability Toggle -->
             <div class="mb-4">
-              <label class="form-label">স্ট্যাটাস</label>
+              <label class="form-label">Availability</label>
               <div class="form-check form-switch">
-                <input type="checkbox" class="form-check-input" formControlName="available">
-                <label class="form-check-label">
-                  {{ itemForm.get('available')?.value ? 'সচল' : 'অচল' }}
+                <input type="checkbox" class="form-check-input" formControlName="available"
+                       id="availabilitySwitch">
+                <label class="form-check-label" for="availabilitySwitch">
+                  {{ itemForm.get('available')?.value ? 'Available' : 'Unavailable' }}
                 </label>
               </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="d-grid gap-2">
-              <button type="submit" class="btn btn-success btn-lg">
-                {{ isEditMode ? 'আপডেট করুন' : 'সংরক্ষণ করুন' }}
+              <button type="submit" class="btn btn-success btn-lg" 
+                      [disabled]="itemForm.invalid || isLoading">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+                <i class="bi" [class.bi-check]="!isLoading" [class.bi-arrow-clockwise]="isLoading"></i>
+                {{ isEditMode ? 'Update Item' : 'Save Item' }}
               </button>
 
-              <button type="button" class="btn btn-outline-secondary" (click)="resetForm()" *ngIf="isEditMode">
-                বাতিল করুন
+              <button type="button" class="btn btn-outline-secondary" 
+                      (click)="resetForm()" 
+                      *ngIf="isEditMode"
+                      [disabled]="isLoading">
+                <i class="bi bi-x-circle"></i> Cancel
               </button>
             </div>
           </div>
@@ -114,47 +132,81 @@
         <div class="menu-table-card">
           <div class="card-header bg-warning text-dark">
             <h5 class="mb-0">
-              মেনু আইটেম তালিকা ({{ items.length }})
+              <i class="bi bi-list-ul me-2"></i>
+              Menu Items List ({{ items.length }})
             </h5>
           </div>
           <div class="card-body p-0">
-            <div class="table-responsive">
+            
+            <!-- Loading State -->
+            <div *ngIf="isLoading && items.length === 0" class="loading-state">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+              <p>Loading menu items...</p>
+            </div>
+
+            <div class="table-responsive" *ngIf="!isLoading || items.length > 0">
               <table class="table table-hover mb-0">
                 <thead class="table-light">
                   <tr>
-                    <th>নাম</th>
-                    <th>দাম</th>
-                    <th>ক্যাটাগরি</th>
-                    <th>স্ট্যাটাস</th>
-                    <th class="text-center">একশন</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th class="text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let item of items">
+                  <tr *ngFor="let item of items" class="menu-item-row">
                     <td>
-                      <strong>{{ item.name }}</strong>
-                      <small class="d-block text-muted">{{ item.description }}</small>
+                      <div class="d-flex align-items-center">
+                        <div class="item-image me-3">
+                          <img [src]="item.imageUrl || 'assets/images/default-food.jpg'" 
+                               [alt]="item.name" 
+                               class="item-thumbnail"
+                               (error)="handleImageError($event)">
+                        </div>
+                        <div>
+                          <strong class="d-block">{{ item.name }}</strong>
+                          <small class="text-muted" *ngIf="item.description">
+                            {{ item.description }}
+                          </small>
+                        </div>
+                      </div>
                     </td>
-                    <td>{{ item.price | currency:'BDT ' }}</td>
-                    <td>{{ item.category?.name }}</td>
                     <td>
-                      <span class="badge" [class.bg-success]="item.available" [class.bg-danger]="!item.available">
-                        {{ item.available ? 'সচল' : 'অচল' }}
+                      <span class="price-badge">{{ item.price | currency:'USD ' }}</span>
+                    </td>
+                    <td>
+                      <span class="category-badge">{{ item.category?.name }}</span>
+                    </td>
+                    <td>
+                      <span class="badge" [class.bg-success]="item.available" 
+                            [class.bg-danger]="!item.available">
+                        {{ item.available ? 'Available' : 'Unavailable' }}
                       </span>
                     </td>
                     <td class="text-center">
-                      <button class="btn btn-sm btn-warning me-1" (click)="editItem(item)">
-                        এডিট
-                      </button>
-                      <button class="btn btn-sm btn-danger" (click)="deleteItem(item.id!)">
-                        ডিলিট
-                      </button>
+                      <div class="btn-group" role="group">
+                        <button class="btn btn-sm btn-outline-warning me-1" 
+                                (click)="editItem(item)"
+                                [disabled]="isLoading">
+                          <i class="bi bi-pencil"></i> Edit
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" 
+                                (click)="deleteItem(item.id!)"
+                                [disabled]="isLoading">
+                          <i class="bi bi-trash"></i> Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
 
-                  <tr *ngIf="items.length === 0">
-                    <td colspan="5" class="text-center py-4 text-muted">
-                      কোন আইটেম খুঁজে পাওয়া যায়নি
+                  <tr *ngIf="items.length === 0 && !isLoading">
+                    <td colspan="5" class="text-center py-5 text-muted">
+                      <i class="bi bi-inbox display-4 d-block mb-2"></i>
+                      No menu items found
                     </td>
                   </tr>
                 </tbody>

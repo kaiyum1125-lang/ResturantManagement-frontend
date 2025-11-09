@@ -5,96 +5,260 @@ $village-cream: #F5F5DC;
 $village-red: #A52A2A;
 $village-gold: #DAA520;
 
-// Village Hero Section
-.village-hero {
-  background: linear-gradient(rgba(139, 69, 19, 0.8), rgba(85, 107, 47, 0.7)),
-              url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVzdGF1cmFudHxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80') no-repeat center center;
-  background-size: cover;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.village-container {
-  position: relative;
-  z-index: 2;
-}
-
-.village-welcome-sign {
-  text-align: center;
-  color: white;
-  padding: 2rem;
-  background: rgba(139, 69, 19, 0.9);
-  border-radius: 15px;
-  border: 3px solid $village-gold;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.village-title {
-  font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.village-name {
-  color: $village-gold;
-  font-family: 'Georgia', serif;
-}
-
-.village-tagline {
-  font-size: 1.3rem;
-  margin-bottom: 2rem;
-  font-style: italic;
-}
-
-.village-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-// Village Buttons
-.btn-village-primary {
-  background: linear-gradient(45deg, $village-red, $village-brown);
-  border: 2px solid $village-gold;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
+// Village Carousel
+.village-carousel {
+  .carousel {
+    height: 80vh;
+    min-height: 600px;
+  }
   
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    color: white;
+  .carousel-inner, .carousel-item {
+    height: 100%;
+  }
+  
+  .carousel-image {
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        rgba(139, 69, 19, 0.4),
+        rgba(85, 107, 47, 0.6)
+      );
+    }
+  }
+  
+  .village-carousel-caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    z-index: 2;
+    
+    h2 {
+      font-size: 3rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      margin-bottom: 1rem;
+      font-family: 'Georgia', serif;
+    }
+    
+    p {
+      font-size: 1.3rem;
+      color: $village-cream;
+      margin-bottom: 2rem;
+    }
+  }
+  
+  .carousel-indicators {
+    bottom: 30px;
+    
+    button {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin: 0 8px;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 2px solid transparent;
+      
+      &.active {
+        background-color: $village-gold;
+        border-color: white;
+      }
+    }
+  }
+  
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 60px;
+    height: 60px;
+    background: rgba(218, 165, 32, 0.8);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 20px;
+    
+    &:hover {
+      background: $village-gold;
+    }
   }
 }
 
-.btn-village-secondary {
-  background: transparent;
-  border: 2px solid $village-gold;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: all 0.3s ease;
+// Quick Info Section
+.quick-info {
+  background: white;
   
-  &:hover {
-    background: $village-gold;
+  .info-card {
+    padding: 2rem 1rem;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-5px);
+      
+      .info-icon {
+        transform: scale(1.1);
+        color: $village-red;
+      }
+    }
+  }
+  
+  .info-icon {
+    font-size: 2.5rem;
     color: $village-brown;
-    transform: translateY(-2px);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  h5 {
+    color: $village-brown;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #666;
+    margin: 0;
   }
 }
 
-// Village Story Section
+// Featured Menu Carousel
+.featured-menu {
+  background: white;
+  
+  .menu-carousel-wrapper {
+    position: relative;
+    
+    .carousel-item {
+      padding: 2rem 0;
+    }
+    
+    .menu-item-image {
+      height: 400px;
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+    
+    .menu-item-content {
+      padding: 2rem;
+      
+      .menu-badge {
+        background: $village-red;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      
+      h3 {
+        color: $village-brown;
+        font-family: 'Georgia', serif;
+        margin: 1rem 0;
+        font-size: 2.2rem;
+      }
+      
+      .menu-description {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #666;
+        margin-bottom: 1.5rem;
+      }
+      
+      .menu-price {
+        font-size: 2rem;
+        color: $village-red;
+        font-weight: bold;
+        font-family: 'Georgia', serif;
+        margin-bottom: 1.5rem;
+      }
+    }
+    
+    .menu-control {
+      width: 50px;
+      height: 50px;
+      background: $village-gold;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.8;
+      
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Testimonials Carousel
+.testimonials {
+  .testimonial-carousel-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    
+    .testimonial-card {
+      background: white;
+      padding: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      border-top: 5px solid $village-gold;
+    }
+    
+    .testimonial-rating {
+      color: $village-gold;
+      font-size: 1.5rem;
+    }
+    
+    .testimonial-text {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #555;
+      font-style: italic;
+      margin-bottom: 2rem;
+    }
+    
+    .testimonial-author {
+      strong {
+        color: $village-brown;
+        font-size: 1.1rem;
+        display: block;
+      }
+      
+      span {
+        color: #888;
+        font-size: 0.9rem;
+      }
+    }
+    
+    .testimonial-control {
+      width: 40px;
+      height: 40px;
+      background: $village-brown;
+      border-radius: 50%;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.7;
+      
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// Rest of your existing styles (keep all your previous styles and add these new ones)
 .village-story {
   background: $village-cream;
 }
@@ -110,10 +274,16 @@ $village-gold: #DAA520;
     content: '';
     position: absolute;
     bottom: -10px;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 80px;
     height: 3px;
     background: $village-gold;
+  }
+  
+  &.text-center::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -217,6 +387,41 @@ $village-gold: #DAA520;
   }
 }
 
+// Buttons (keep your existing button styles)
+.btn-village-primary {
+  background: linear-gradient(45deg, $village-red, $village-brown);
+  border: 2px solid $village-gold;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    color: white;
+  }
+}
+
+.btn-village-secondary {
+  background: transparent;
+  border: 2px solid $village-gold;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: $village-gold;
+    color: $village-brown;
+    transform: translateY(-2px);
+  }
+}
+
 .btn-village-cta {
   background: $village-gold;
   border: 2px solid $village-gold;
@@ -252,6 +457,21 @@ $village-gold: #DAA520;
 
 // Responsive Design
 @media (max-width: 768px) {
+  .village-carousel {
+    .carousel {
+      height: 60vh;
+      min-height: 400px;
+    }
+    
+    .village-carousel-caption h2 {
+      font-size: 2rem;
+    }
+    
+    .village-carousel-caption p {
+      font-size: 1rem;
+    }
+  }
+  
   .village-title {
     font-size: 2rem;
   }
@@ -274,23 +494,29 @@ $village-gold: #DAA520;
       margin: 0 !important;
     }
   }
+  
+  .featured-menu {
+    .menu-item-content {
+      padding: 1rem 0;
+    }
+    
+    .menu-item-content h3 {
+      font-size: 1.8rem;
+    }
+  }
+  
+  .quick-info {
+    .info-card {
+      padding: 1rem 0.5rem;
+    }
+    
+    .info-icon {
+      font-size: 2rem;
+    }
+  }
 }
 
-// Village Scenery Elements (Optional decorative elements)
-.village-scenery {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px;
-  z-index: 1;
-}
-
-.village-house, .village-tree, .village-fence {
-  position: absolute;
-  bottom: 0;
-}
-
+// Village Scenery Elements
 .village-cabin-img {
   border: 5px solid $village-brown;
   box-shadow: 10px 10px 0px $village-gold;

@@ -23,6 +23,8 @@ import { AdminCategoriesComponent } from './features/admin/admin-categories/admi
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
+import { ReservationsComponent } from './components/reservations/reservations.component';
+
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { CartItemComponent } from './components/cart-item/cart-item.component';
     AdminDashboardComponent,
     CartComponent,
     CartItemComponent,
+    ReservationsComponent,
+  
   ],
   imports: [
     BrowserModule,

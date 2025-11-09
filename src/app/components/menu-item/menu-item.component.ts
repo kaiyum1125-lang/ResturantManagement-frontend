@@ -4,7 +4,6 @@ import { MenuCategoryService } from 'src/app/services/menu-category.service';
 import { MenuItemService } from 'src/app/services/menu-item.service';
 import { MenuItem, MenuCategory } from 'src/app/services/menu.service';
 
-
 @Component({
   selector: 'app-menu-item',
   templateUrl: './menu-item.component.html',
@@ -40,7 +39,7 @@ export class MenuItemComponent implements OnInit {
       price: [0, [Validators.required, Validators.min(1)]],
       available: [true],
       imageUrl: [''],
-      category: [null, Validators.required] // Keep as null for object binding
+      category: [null, Validators.required]
     });
   }
 
@@ -53,7 +52,7 @@ export class MenuItemComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading items:', error);
-        this.showAlert('আইটেম লোড করতে সমস্যা হয়েছে', 'alert-danger');
+        this.showAlert('Error loading menu items', 'alert-danger');
         this.isLoading = false;
       }
     });
@@ -66,18 +65,16 @@ export class MenuItemComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading categories:', error);
-        this.showAlert('ক্যাটাগরি লোড করতে সমস্যা হয়েছে', 'alert-danger');
+        this.showAlert('Error loading categories', 'alert-danger');
       }
     });
   }
 
   onSubmit(): void {
-    // Force validation check
     this.markAllFieldsAsTouched();
     
     if (this.itemForm.invalid) {
-      console.log('Form invalid. Category value:', this.itemForm.get('category')?.value);
-      this.showAlert('দয়া করে সকল প্রয়োজনীয় তথ্য প্রদান করুন', 'alert-danger');
+      this.showAlert('Please fill all required fields correctly', 'alert-danger');
       return;
     }
 
@@ -91,7 +88,7 @@ export class MenuItemComponent implements OnInit {
       price: formData.price,
       available: formData.available,
       imageUrl: formData.imageUrl || 'assets/images/default-food.jpg',
-      category: formData.categor,
+      category: formData.category,
       isPopular: undefined,
       isSpicy: undefined,
       cookingTime: undefined
@@ -109,12 +106,12 @@ export class MenuItemComponent implements OnInit {
       next: (newItem) => {
         this.items.push(newItem);
         this.resetForm();
-        this.showAlert('আইটেম সফলভাবে যোগ হয়েছে!', 'alert-success');
+        this.showAlert('Menu item added successfully!', 'alert-success');
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error creating item:', error);
-        this.showAlert('আইটেম তৈরি করতে সমস্যা হয়েছে', 'alert-danger');
+        this.showAlert('Error creating menu item', 'alert-danger');
         this.isLoading = false;
       }
     });
@@ -128,12 +125,12 @@ export class MenuItemComponent implements OnInit {
           this.items[index] = updatedItem;
         }
         this.resetForm();
-        this.showAlert('আইটেম সফলভাবে আপডেট হয়েছে!', 'alert-success');
+        this.showAlert('Menu item updated successfully!', 'alert-success');
         this.isLoading = false;
       },
       error: (error) => {
         console.error('Error updating item:', error);
-        this.showAlert('আইটেম আপডেট করতে সমস্যা হয়েছে', 'alert-danger');
+        this.showAlert('Error updating menu item', 'alert-danger');
         this.isLoading = false;
       }
     });
@@ -150,20 +147,26 @@ export class MenuItemComponent implements OnInit {
       category: item.category
     });
     this.isEditMode = true;
+    
+    // Scroll to form
+    const formElement = document.querySelector('form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   deleteItem(id: number): void {
-    if (confirm('আপনি কি নিশ্চিত যে আপনি এই আইটেমটি ডিলিট করতে চান?')) {
+    if (confirm('Are you sure you want to delete this menu item?')) {
       this.isLoading = true;
       this.menuItemService.delete(id).subscribe({
         next: () => {
           this.items = this.items.filter(item => item.id !== id);
-          this.showAlert('আইটেম সফলভাবে ডিলিট হয়েছে!', 'alert-success');
+          this.showAlert('Menu item deleted successfully!', 'alert-success');
           this.isLoading = false;
         },
         error: (error) => {
           console.error('Error deleting item:', error);
-          this.showAlert('আইটেম ডিলিট করতে সমস্যা হয়েছে', 'alert-danger');
+          this.showAlert('Error deleting menu item', 'alert-danger');
           this.isLoading = false;
         }
       });
@@ -208,4 +211,12 @@ export class MenuItemComponent implements OnInit {
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = 'assets/images/default-food.jpg';
   }
+
+  // Form field getters for easy template access
+  get name() { return this.itemForm.get('name'); }
+  get description() { return this.itemForm.get('description'); }
+  get price() { return this.itemForm.get('price'); }
+  get category() { return this.itemForm.get('category'); }
+  get imageUrl() { return this.itemForm.get('imageUrl'); }
+  get available() { return this.itemForm.get('available'); }
 }
