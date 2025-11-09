@@ -13,23 +13,32 @@ export interface Staff {
   providedIn: 'root'
 })
 export class StaffService {
-  private apiUrl = 'http://localhost:3000/staff';
+  private apiUrl = 'http://localhost:8080/api/staff'; // Updated to match Spring Boot backend
 
   constructor(private http: HttpClient) {}
 
-  getStaff(): Observable<Staff[]> {
+  // Get all staff - matches Spring Boot endpoint
+  getAllStaff(): Observable<Staff[]> {
     return this.http.get<Staff[]>(this.apiUrl);
   }
 
-  addStaff(staff: Staff): Observable<Staff> {
+  // Create new staff - matches Spring Boot endpoint
+  createStaff(staff: Staff): Observable<Staff> {
     return this.http.post<Staff>(this.apiUrl, staff);
   }
 
-  updateStaff(staff: Staff): Observable<Staff> {
-    return this.http.put<Staff>(`${this.apiUrl}/${staff.id}`, staff);
+  // Update staff - matches Spring Boot endpoint
+  updateStaff(id: number, staff: Staff): Observable<Staff> {
+    return this.http.put<Staff>(`${this.apiUrl}/${id}`, staff);
   }
 
+  // Delete staff - matches Spring Boot endpoint
   deleteStaff(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // Get staff by ID - matches Spring Boot endpoint
+  getStaffById(id: number): Observable<Staff> {
+    return this.http.get<Staff>(`${this.apiUrl}/${id}`);
   }
 }

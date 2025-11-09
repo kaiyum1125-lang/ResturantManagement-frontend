@@ -1,62 +1,144 @@
 <app-sidebar></app-sidebar>
 <div class="page-container">
-  <h2>Staff Management</h2>
-  <p>Manage all staff members, roles, and emails.</p>
+  <div class="header-section">
+    <h2>Staff Management</h2>
+    <p>Manage all staff members, roles, and emails.</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    {{ errorMessage }}
+    <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+  </div>
 
   <!-- Staff Form -->
-  <form [formGroup]="staffForm" (ngSubmit)="submitForm()" class="mb-4">
-    <div class="row g-3 align-items-end">
+  <form [formGroup]="staffForm" (ngSubmit)="submitForm()" class="staff-form">
+    <div class="form-header">
+      <h4>{{ editMode ? 'Edit Staff Member' : 'Add New Staff Member' }}</h4>
+    </div>
+    
+    <div class="row g-3">
       <div class="col-md-4">
-        <label class="form-label">Name</label>
-        <input type="text" class="form-control" formControlName="name">
+        <label class="form-label">Name <span class="text-danger">*</span></label>
+        <input 
+          type="text" 
+          class="form-control" 
+          formControlName="name"
+          [class.is-invalid]="name?.invalid && name?.touched"
+          placeholder="Enter full name">
+        <div class="invalid-feedback" *ngIf="name?.invalid && name?.touched">
+          <div *ngIf="name?.errors?.['required']">Name is required</div>
+          <div *ngIf="name?.errors?.['minlength']">Name must be at least 2 characters</div>
+        </div>
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Role</label>
-        <input type="text" class="form-control" formControlName="role">
+        <label class="form-label">Role <span class="text-danger">*</span></label>
+        <input 
+          type="text" 
+          class="form-control" 
+          formControlName="role"
+          [class.is-invalid]="role?.invalid && role?.touched"
+          placeholder="Enter role">
+        <div class="invalid-feedback" *ngIf="role?.invalid && role?.touched">
+          <div *ngIf="role?.errors?.['required']">Role is required</div>
+          <div *ngIf="role?.errors?.['minlength']">Role must be at least 2 characters</div>
+        </div>
       </div>
 
       <div class="col-md-4">
-        <label class="form-label">Email</label>
-        <input type="email" class="form-control" formControlName="email">
+        <label class="form-label">Email <span class="text-danger">*</span></label>
+        <input 
+          type="email" 
+          class="form-control" 
+          formControlName="email"
+          [class.is-invalid]="email?.invalid && email?.touched"
+          placeholder="Enter email address">
+        <div class="invalid-feedback" *ngIf="email?.invalid && email?.touched">
+          <div *ngIf="email?.errors?.['required']">Email is required</div>
+          <div *ngIf="email?.errors?.['email']">Please enter a valid email address</div>
+        </div>
       </div>
+    </div>
 
-      <div class="col-12 text-end">
-        <button class="btn btn-success me-2" type="submit" [disabled]="staffForm.invalid">
-          {{ editMode ? 'Update' : 'Add' }}
-        </button>
-        <button class="btn btn-secondary" type="button" (click)="resetForm()">Cancel</button>
-      </div>
+    <div class="form-actions">
+      <button 
+        class="btn btn-success me-2" 
+        type="submit" 
+        [disabled]="staffForm.invalid || isLoading">
+        <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+        <i class="bi" [class.bi-check]="!isLoading" [class.bi-arrow-clockwise]="isLoading"></i>
+        {{ editMode ? 'Update Staff' : 'Add Staff' }}
+      </button>
+      <button 
+        class="btn btn-outline-secondary" 
+        type="button" 
+        (click)="resetForm()"
+        [disabled]="isLoading">
+        Cancel
+      </button>
     </div>
   </form>
 
+  <!-- Loading State -->
+  <div *ngIf="isLoading && staffList.length === 0" class="loading-state">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p>Loading staff data...</p>
+  </div>
+
   <!-- Staff Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered table-hover text-center">
-      <thead class="table-dark">
-        <tr>
-          <th>Name</th>
-          <th>Role</th>
-          <th>Email</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody *ngIf="staffList.length > 0; else noData">
-        <tr *ngFor="let staff of staffList">
-          <td>{{ staff.name }}</td>
-          <td>{{ staff.role }}</td>
-          <td>{{ staff.email }}</td>
-          <td>
-            <button class="btn btn-sm btn-primary me-2" (click)="editStaff(staff)">Edit</button>
-            <button class="btn btn-sm btn-danger" (click)="deleteStaff(staff)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <ng-template #noData>
-      <tr>
-        <td colspan="4" class="text-muted text-center">No staff available.</td>
-      </tr>
-    </ng-template>
+  <div *ngIf="!isLoading || staffList.length > 0" class="table-section">
+    <div class="table-header">
+      <h5>Staff Members ({{ staffList.length }})</h5>
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let staff of staffList">
+            <td class="text-muted">{{ staff.id }}</td>
+            <td>{{ staff.name }}</td>
+            <td>
+              <span class="badge bg-primary">{{ staff.role }}</span>
+            </td>
+            <td>{{ staff.email }}</td>
+            <td>
+              <div class="btn-group" role="group">
+                <button 
+                  class="btn btn-sm btn-outline-primary me-1" 
+                  (click)="editStaff(staff)"
+                  [disabled]="isLoading">
+                  <i class="bi bi-pencil"></i> Edit
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline-danger" 
+                  (click)="deleteStaff(staff)"
+                  [disabled]="isLoading">
+                  <i class="bi bi-trash"></i> Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div *ngIf="staffList.length === 0 && !isLoading" class="empty-state">
+        <i class="bi bi-people"></i>
+        <p>No staff members found.</p>
+        <p class="text-muted">Add your first staff member using the form above.</p>
+      </div>
+    </div>
   </div>
 </div>

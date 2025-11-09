@@ -257,7 +257,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   navigateToAdmin(): void {
     if (this.userRole === 'admin') {
-      this.router.navigate(['/admin']);
+      this.router.navigate(['admin']);
     } else {
       this.authError = 'Access denied. Admin privileges required.';
     }

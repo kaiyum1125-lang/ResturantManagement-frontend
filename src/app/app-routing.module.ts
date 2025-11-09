@@ -19,7 +19,7 @@ import { CartComponent } from './components/cart/cart.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  // { path: 'admin', component: DashboardComponent },
+  { path: 'admin', component: DashboardComponent },
   // { path: 'admin/dashboard', component: DashboardComponent },
   { path: 'admin/menu-management', component: MenuManagementComponent },
   { path: 'admin/staff-management', component: StaffManagementComponent },
