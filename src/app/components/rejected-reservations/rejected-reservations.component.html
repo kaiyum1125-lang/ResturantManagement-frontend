@@ -1,0 +1,31 @@
+<div class="container mt-4">
+  <h2>Rejected Reservations ({{ totalRejected }})</h2>
+
+  <table class="table table-bordered table-hover mt-3" *ngIf="rejectedList.length > 0; else noData">
+    <thead class="table-danger">
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Date</th>
+        <th>Time Slot</th>
+        <th>Guests</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let res of rejectedList">
+        <td>{{ res.id }}</td>
+        <td>{{ res.customerName }}</td>
+        <td>{{ res.contactNumber }}</td>
+        <td>{{ res.date }}</td>
+        <td>{{ res.timeSlot }}</td>
+        <td>{{ res.numberOfGuests }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noData>
+    <p class="text-muted">No rejected bookings.</p>
+  </ng-template>
+</div>
+

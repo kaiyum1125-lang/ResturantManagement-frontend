@@ -8,7 +8,7 @@
 
     <!-- Mobile Toggle Button -->
     <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -16,31 +16,23 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/" 
-             routerLinkActive="active text-warning" 
-             [routerLinkActiveOptions]="{exact: true}">
+          <a class="nav-link" routerLink="/" routerLinkActive="active text-warning"
+            [routerLinkActiveOptions]="{exact: true}">
             <i class="bi bi-house-door me-1"></i>Home
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/menu" 
-             routerLinkActive="active text-warning">
+          <a class="nav-link" routerLink="/menu" routerLinkActive="active text-warning">
             <i class="bi bi-menu-button me-1"></i>Menu
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/about" 
-             routerLinkActive="active text-warning">
+          <a class="nav-link" routerLink="/about" routerLinkActive="active text-warning">
             <i class="bi bi-info-circle me-1"></i>About
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" 
-             routerLink="/contact" 
-             routerLinkActive="active text-warning">
+          <a class="nav-link" routerLink="/contact" routerLinkActive="active text-warning">
             <i class="bi bi-telephone me-1"></i>Contact
           </a>
         </li>
@@ -51,12 +43,8 @@
         <!-- Search Bar -->
         <div class="nav-item me-3 d-none d-lg-block">
           <div class="search-container position-relative">
-            <input type="text" 
-                   class="form-control form-control-sm search-input" 
-                   placeholder="Search menu..."
-                   [(ngModel)]="searchTerm"
-                   (input)="onSearch()"
-                   (focus)="onSearch()">
+            <input type="text" class="form-control form-control-sm search-input" placeholder="Search menu..."
+              [(ngModel)]="searchTerm" (input)="onSearch()" (focus)="onSearch()">
             <i class="bi bi-search position-absolute search-icon"></i>
           </div>
         </div>
@@ -65,8 +53,8 @@
         <div class="nav-item me-3 position-relative">
           <a class="nav-link text-light position-relative" (click)="navigateToCart()" style="cursor: pointer;">
             <i class="bi bi-cart3 fs-5"></i>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
-                  *ngIf="cartItemsCount > 0">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              *ngIf="cartItemsCount > 0">
               {{cartItemsCount}}
               <span class="visually-hidden">cart items</span>
             </span>
@@ -76,11 +64,8 @@
 
         <!-- User/Auth Section -->
         <div class="nav-item dropdown" *ngIf="isLoggedIn; else authButtons">
-          <a class="nav-link dropdown-toggle text-light d-flex align-items-center" 
-             href="#" 
-             role="button" 
-             data-bs-toggle="dropdown" 
-             aria-expanded="false">
+          <a class="nav-link dropdown-toggle text-light d-flex align-items-center" href="#" role="button"
+            data-bs-toggle="dropdown" aria-expanded="false">
             <i class="bi bi-person-circle me-2 fs-5"></i>
             <span class="d-none d-sm-inline">{{userName}}</span>
           </a>
@@ -90,9 +75,14 @@
                 <i class="bi bi-person me-2"></i>Profile
               </a>
             </li>
-             <li>
+            <li>
               <a class="dropdown-item" routerLink="admin">
                 <i class="bi bi-person me-2"></i>Admin Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="dropdown-item" routerLink="/reservationsList">
+                <i class="bi bi-person me-2"></i>Reservations
               </a>
             </li>
             <li>
@@ -108,7 +98,9 @@
                 </span>
               </a>
             </li>
-            <li><hr class="dropdown-divider"></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li *ngIf="userRole === 'admin'">
               <a class="dropdown-item text-warning" (click)="navigateToAdmin()">
                 <i class="bi bi-speedometer2 me-2"></i>Admin Dashboard
@@ -158,24 +150,18 @@
           </h6>
           <button class="btn-close btn-sm" (click)="clearSearch()" aria-label="Close search"></button>
         </div>
-        
+
         <div *ngIf="searchResults.length > 0; else noResults">
-          <div class="search-result-item" 
-               *ngFor="let item of searchResults" 
-               (click)="navigateToMenuItem(item)">
+          <div class="search-result-item" *ngFor="let item of searchResults" (click)="navigateToMenuItem(item)">
             <div class="d-flex align-items-center py-2">
-              <img [src]="item.imageUrl || 'assets/default-food.jpg'" 
-                   [alt]="item.name" 
-                   class="search-item-image me-3 rounded"
-                   onerror="this.src='assets/default-food.jpg'">
+              <img [src]="item.imageUrl || 'assets/default-food.jpg'" [alt]="item.name"
+                class="search-item-image me-3 rounded" onerror="this.src='assets/default-food.jpg'">
               <div class="flex-grow-1">
                 <h6 class="mb-1 fw-bold text-dark">{{item.name}}</h6>
                 <p class="text-muted small mb-1 text-truncate" style="max-width: 300px;">{{item.description}}</p>
                 <div class="d-flex align-items-center justify-content-between">
                   <span class="text-warning fw-bold">${{item.price}}</span>
-                  <span class="badge small" 
-                        [class.bg-success]="item.available" 
-                        [class.bg-danger]="!item.available">
+                  <span class="badge small" [class.bg-success]="item.available" [class.bg-danger]="!item.available">
                     {{item.available ? 'Available' : 'Out of Stock'}}
                   </span>
                 </div>
@@ -183,15 +169,16 @@
               <i class="bi bi-chevron-right text-muted ms-2"></i>
             </div>
           </div>
-          
+
           <!-- View All Results -->
           <div class="text-center mt-3 pt-2 border-top">
-            <button class="btn btn-outline-warning btn-sm" (click)="clearSearch()" [routerLink]="['/menu']" [queryParams]="{search: searchTerm}">
+            <button class="btn btn-outline-warning btn-sm" (click)="clearSearch()" [routerLink]="['/menu']"
+              [queryParams]="{search: searchTerm}">
               View All Matching Items
             </button>
           </div>
         </div>
-        
+
         <ng-template #noResults>
           <div class="text-center py-4">
             <i class="bi bi-search display-4 text-muted mb-3"></i>
@@ -207,12 +194,8 @@
 <!-- Auth Modal -->
 <div class="modal-backdrop fade show auth-modal-backdrop" *ngIf="showAuthModal"></div>
 
-<div class="modal fade show d-block" 
-     *ngIf="showAuthModal" 
-     tabindex="-1" 
-     aria-labelledby="authModalLabel" 
-     aria-hidden="true"
-     [class.show]="showAuthModal">
+<div class="modal fade show d-block" *ngIf="showAuthModal" tabindex="-1" aria-labelledby="authModalLabel"
+  aria-hidden="true" [class.show]="showAuthModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow-lg">
       <!-- Modal Header -->
@@ -223,7 +206,7 @@
         </h5>
         <button type="button" class="btn-close btn-close-white" (click)="closeAuthModal()" aria-label="Close"></button>
       </div>
-      
+
       <!-- Modal Body -->
       <div class="modal-body p-4">
         <!-- Error Message -->
@@ -240,13 +223,8 @@
               <span class="input-group-text bg-light border-end-0">
                 <i class="bi bi-person text-muted"></i>
               </span>
-              <input type="text" 
-                     class="form-control border-start-0" 
-                     id="name"
-                     [(ngModel)]="authFormData.name" 
-                     name="name"
-                     required
-                     placeholder="Enter your full name">
+              <input type="text" class="form-control border-start-0" id="name" [(ngModel)]="authFormData.name"
+                name="name" required placeholder="Enter your full name">
             </div>
           </div>
 
@@ -257,13 +235,8 @@
               <span class="input-group-text bg-light border-end-0">
                 <i class="bi bi-envelope text-muted"></i>
               </span>
-              <input type="email" 
-                     class="form-control border-start-0" 
-                     id="email"
-                     [(ngModel)]="authFormData.email" 
-                     name="email"
-                     required
-                     placeholder="your.email@example.com">
+              <input type="email" class="form-control border-start-0" id="email" [(ngModel)]="authFormData.email"
+                name="email" required placeholder="your.email@example.com">
             </div>
           </div>
 
@@ -274,14 +247,9 @@
               <span class="input-group-text bg-light border-end-0">
                 <i class="bi bi-lock text-muted"></i>
               </span>
-              <input type="password" 
-                     class="form-control border-start-0" 
-                     id="password"
-                     [(ngModel)]="authFormData.password" 
-                     name="password"
-                     required
-                     [minlength]="isLoginMode ? 1 : 6"
-                     [placeholder]="isLoginMode ? 'Enter your password' : 'Create a strong password'">
+              <input type="password" class="form-control border-start-0" id="password"
+                [(ngModel)]="authFormData.password" name="password" required [minlength]="isLoginMode ? 1 : 6"
+                [placeholder]="isLoginMode ? 'Enter your password' : 'Create a strong password'">
             </div>
             <div class="form-text" *ngIf="!isLoginMode">
               <i class="bi bi-info-circle me-1"></i>
@@ -296,27 +264,22 @@
               <span class="input-group-text bg-light border-end-0">
                 <i class="bi bi-lock-fill text-muted"></i>
               </span>
-              <input type="password" 
-                     class="form-control border-start-0" 
-                     id="confirmPassword"
-                     [(ngModel)]="authFormData.confirmPassword" 
-                     name="confirmPassword"
-                     required
-                     placeholder="Confirm your password">
+              <input type="password" class="form-control border-start-0" id="confirmPassword"
+                [(ngModel)]="authFormData.confirmPassword" name="confirmPassword" required
+                placeholder="Confirm your password">
             </div>
           </div>
 
           <!-- Submit Button -->
-          <button type="submit" 
-                  class="btn btn-warning w-100 py-2 mb-3 fw-bold" 
-                  [disabled]="isLoading"
-                  [class]="isLoading ? 'btn-warning opacity-75' : 'btn-warning'">
+          <button type="submit" class="btn btn-warning w-100 py-2 mb-3 fw-bold" [disabled]="isLoading"
+            [class]="isLoading ? 'btn-warning opacity-75' : 'btn-warning'">
             <span *ngIf="isLoading">
               <span class="spinner-border spinner-border-sm me-2"></span>
               Processing...
             </span>
             <span *ngIf="!isLoading">
-              <i class="bi" [class.bi-box-arrow-in-right]="isLoginMode" [class.bi-person-plus]="!isLoginMode" class="me-2"></i>
+              <i class="bi" [class.bi-box-arrow-in-right]="isLoginMode" [class.bi-person-plus]="!isLoginMode"
+                class="me-2"></i>
               {{ isLoginMode ? 'Sign In' : 'Create Account' }}
             </span>
           </button>
@@ -325,9 +288,8 @@
           <div class="text-center">
             <p class="mb-0 text-muted">
               {{ isLoginMode ? "Don't have an account?" : "Already have an account?" }}
-              <a href="javascript:void(0)" 
-                 class="text-warning text-decoration-none fw-semibold" 
-                 (click)="switchAuthMode()">
+              <a href="javascript:void(0)" class="text-warning text-decoration-none fw-semibold"
+                (click)="switchAuthMode()">
                 {{ isLoginMode ? 'Sign up now' : 'Sign in here' }}
               </a>
             </p>
@@ -357,17 +319,11 @@
   <div class="collapse" id="mobileSearch">
     <div class="p-3 bg-dark">
       <div class="search-container position-relative">
-        <input type="text" 
-               class="form-control search-input" 
-               placeholder="Search menu items..."
-               [(ngModel)]="searchTerm"
-               (input)="onSearch()"
-               (focus)="onSearch()">
+        <input type="text" class="form-control search-input" placeholder="Search menu items..." [(ngModel)]="searchTerm"
+          (input)="onSearch()" (focus)="onSearch()">
         <i class="bi bi-search position-absolute search-icon"></i>
-        <button class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-2" 
-                data-bs-toggle="collapse" 
-                data-bs-target="#mobileSearch"
-                aria-label="Close search"></button>
+        <button class="btn-close btn-close-white position-absolute end-0 top-50 translate-middle-y me-2"
+          data-bs-toggle="collapse" data-bs-target="#mobileSearch" aria-label="Close search"></button>
       </div>
     </div>
   </div>
@@ -376,15 +332,13 @@
 <!-- Mobile Search Toggle -->
 <div class="d-lg-none fixed-bottom p-3 bg-dark border-top" *ngIf="!isLoggedIn">
   <div class="d-flex justify-content-between align-items-center">
-    <button class="btn btn-outline-warning btn-sm flex-grow-1 me-2" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#mobileSearch">
+    <button class="btn btn-outline-warning btn-sm flex-grow-1 me-2" data-bs-toggle="collapse"
+      data-bs-target="#mobileSearch">
       <i class="bi bi-search me-1"></i> Search Menu
     </button>
     <button class="btn btn-warning btn-sm" (click)="navigateToCart()">
       <i class="bi bi-cart3"></i>
-      <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" 
-            *ngIf="cartItemsCount > 0">
+      <span class="badge bg-danger position-absolute top-0 start-100 translate-middle" *ngIf="cartItemsCount > 0">
         {{cartItemsCount}}
       </span>
     </button>

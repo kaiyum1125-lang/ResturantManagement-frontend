@@ -1,1 +1,115 @@
-<p>reservations works!</p>
+<div class="reservation-container">
+  <!-- Header with back button -->
+  <div class="header">
+    <button class="back-button" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i>
+      Back
+    </button>
+    <h2 class="page-title">Book a Table</h2>
+  </div>
+
+  <!-- Main content -->
+  <div class="container py-4">
+    <div class="reservation-card">
+      <div class="card-header">
+        <h3>Make Your Reservation</h3>
+        <p class="subtitle">Fill in the details below to secure your table</p>
+      </div>
+      
+      <form (ngSubmit)="bookTable()" #reservationForm="ngForm" class="reservation-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customerName">Full Name</label>
+            <div class="input-with-icon">
+              <i class="fas fa-user"></i>
+              <input 
+                type="text" 
+                id="customerName"
+                class="form-control" 
+                name="name" 
+                [(ngModel)]="reservation.customerName" 
+                placeholder="Enter your full name"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactNumber">Contact Number</label>
+            <div class="input-with-icon">
+              <i class="fas fa-phone"></i>
+              <input 
+                type="text" 
+                id="contactNumber"
+                class="form-control" 
+                name="contactNumber" 
+                [(ngModel)]="reservation.contactNumber" 
+                placeholder="Your phone number"
+                required>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="date">Reservation Date</label>
+            <div class="input-with-icon">
+              <i class="fas fa-calendar-alt"></i>
+              <input 
+                type="date" 
+                id="date"
+                class="form-control" 
+                name="date" 
+                [(ngModel)]="reservation.date" 
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="timeSlot">Time Slot</label>
+            <div class="input-with-icon">
+              <i class="fas fa-clock"></i>
+              <select 
+                id="timeSlot"
+                class="form-select" 
+                name="timeSlot" 
+                [(ngModel)]="reservation.timeSlot" 
+                required>
+                <option value="">-- Select Time --</option>
+                <option>12:00 PM - 2:00 PM</option>
+                <option>2:00 PM - 4:00 PM</option>
+                <option>6:00 PM - 8:00 PM</option>
+                <option>8:00 PM - 10:00 PM</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="guests">Number of Guests</label>
+          <div class="input-with-icon">
+            <i class="fas fa-users"></i>
+            <input 
+              type="number" 
+              id="guests"
+              class="form-control" 
+              name="guests" 
+              [(ngModel)]="reservation.numberOfGuests" 
+              min="1"
+              max="20"
+              required>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary w-100"
+            [disabled]="!reservationForm.form.valid">
+            <i class="fas fa-check-circle"></i>
+            Confirm Booking
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

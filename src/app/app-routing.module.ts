@@ -15,6 +15,10 @@ import { AdminCategoriesComponent } from './features/admin/admin-categories/admi
 import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-dashboard.component';
 import { AdminMenuComponent } from './features/admin/admin-menu/admin-menu.component';
 import { CartComponent } from './components/cart/cart.component';
+import { ReservationsComponent } from './components/reservations/reservations.component';
+import { ApprovedReservationsComponent } from './components/approved-reservations/approved-reservations.component';
+import { RejectedReservationsComponent } from './components/rejected-reservations/rejected-reservations.component';
+import { ReservationListComponent } from './components/reservation-list/reservation-list.component';
 
 
 const routes: Routes = [
@@ -29,7 +33,14 @@ const routes: Routes = [
   { path: 'menu', component: MenuComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
-   { path: 'cart', component: CartComponent },
+  { path: 'cart', component: CartComponent },
+  { path: 'reservations', component: ReservationsComponent },
+  { path: 'reservationsList', component: ReservationListComponent },
+
+  // { path: 'approved-reservations', component: ApprovedReservationsComponent },
+  // { path: 'rejected-reservations', component: RejectedReservationsComponent },
+  { path: 'book-table', component: ReservationsComponent },
+  // { path: '', redirectTo: '/book-table', pathMatch: 'full' },
 
   // Admin routes
   {

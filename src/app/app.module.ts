@@ -24,6 +24,9 @@ import { AdminDashboardComponent } from './features/admin/admin-dashboard/admin-
 import { CartComponent } from './components/cart/cart.component';
 import { CartItemComponent } from './components/cart-item/cart-item.component';
 import { ReservationsComponent } from './components/reservations/reservations.component';
+import { ApprovedReservationsComponent } from './components/approved-reservations/approved-reservations.component';
+import { RejectedReservationsComponent } from './components/rejected-reservations/rejected-reservations.component';
+import { ReservationListComponent } from './components/reservation-list/reservation-list.component';
 
 
 @NgModule({
@@ -48,6 +51,9 @@ import { ReservationsComponent } from './components/reservations/reservations.co
     CartComponent,
     CartItemComponent,
     ReservationsComponent,
+    ApprovedReservationsComponent,
+    RejectedReservationsComponent,
+    ReservationListComponent,
   
   ],
   imports: [
@@ -55,7 +61,8 @@ import { ReservationsComponent } from './components/reservations/reservations.co
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+
 
   ],
   providers: [],

@@ -1,0 +1,48 @@
+<div *ngIf="loading" class="text-center my-3">Loading reservations...</div>
+
+<table *ngIf="!loading && reservations.length > 0" class="table table-bordered table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Customer Name</th>
+      <th>Contact</th>
+      <th>Date</th>
+      <th>Time Slot</th>
+      <th>Guests</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let res of reservations">
+      <td>{{ res.id }}</td>
+      <td>{{ res.customerName }}</td>
+      <td>{{ res.contactNumber }}</td>
+      <td>{{ res.date }}</td>
+      <td>{{ res.timeSlot }}</td>
+      <td>{{ res.numberOfGuests }}</td>
+      <td>
+        <span [ngClass]="{
+          'badge bg-warning text-dark': res.status === 'PENDING',
+          'badge bg-success': res.status === 'APPROVED',
+          'badge bg-danger': res.status === 'REJECTED'
+        }">{{ res.status }}</span>
+      </td>
+      <td>
+        <!-- PENDING: show both buttons -->
+        <button *ngIf="res.status === 'PENDING'" class="btn btn-success btn-sm me-1" (click)="approveReservation(res.id)">Approve</button>
+        <button *ngIf="res.status === 'PENDING'" class="btn btn-danger btn-sm" (click)="rejectReservation(res.id)">Reject</button>
+
+        <!-- APPROVED: show only Reject to revert -->
+        <button *ngIf="res.status === 'APPROVED'" class="btn btn-danger btn-sm" (click)="rejectReservation(res.id)">Reject</button>
+
+        <!-- REJECTED: show only Approve to revert -->
+        <button *ngIf="res.status === 'REJECTED'" class="btn btn-success btn-sm" (click)="approveReservation(res.id)">Approve</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="!loading && reservations.length === 0" class="text-center my-3">
+  No reservations found.
+</div>
