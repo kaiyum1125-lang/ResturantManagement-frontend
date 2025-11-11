@@ -27,6 +27,7 @@ import { ReservationsComponent } from './components/reservations/reservations.co
 import { ApprovedReservationsComponent } from './components/approved-reservations/approved-reservations.component';
 import { RejectedReservationsComponent } from './components/rejected-reservations/rejected-reservations.component';
 import { ReservationListComponent } from './components/reservation-list/reservation-list.component';
+import { OrderListComponent } from './components/order-list/order-list.component';
 
 
 @NgModule({
@@ -54,6 +55,7 @@ import { ReservationListComponent } from './components/reservation-list/reservat
     ApprovedReservationsComponent,
     RejectedReservationsComponent,
     ReservationListComponent,
+    OrderListComponent,
   
   ],
   imports: [

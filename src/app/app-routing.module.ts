@@ -19,6 +19,7 @@ import { ReservationsComponent } from './components/reservations/reservations.co
 import { ApprovedReservationsComponent } from './components/approved-reservations/approved-reservations.component';
 import { RejectedReservationsComponent } from './components/rejected-reservations/rejected-reservations.component';
 import { ReservationListComponent } from './components/reservation-list/reservation-list.component';
+import { OrderListComponent } from './components/order-list/order-list.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,8 @@ const routes: Routes = [
   { path: 'cart', component: CartComponent },
   { path: 'reservations', component: ReservationsComponent },
   { path: 'reservationsList', component: ReservationListComponent },
+  { path: 'orders', component: OrderListComponent },
+  // { path: '', redirectTo: '/orders', pathMatch: 'full' },
 
   // { path: 'approved-reservations', component: ApprovedReservationsComponent },
   // { path: 'rejected-reservations', component: RejectedReservationsComponent },
