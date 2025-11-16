@@ -34,13 +34,13 @@
     <div *ngIf="cart && cart.cartItems.length > 0" class="row">
       <!-- Cart Items -->
       <div class="col-lg-8">
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-light">
+        <div class="CARD shadow-sm mb-4">
+          <div class="CARD-header bg-light">
             <h5 class="mb-0">
               <i class="bi bi-list-ul me-2"></i>Order Items ({{getTotalItems()}})
             </h5>
           </div>
-          <div class="card-body p-0">
+          <div class="CARD-body p-0">
             <!-- Cart Item -->
             <!-- <div *ngFor="let item of cart.cartItems" class="cart-item border-bottom"> -->
             <div *ngFor="let item of cart.cartItems; trackBy: trackByItemId" class="cart-item border-bottom">
@@ -103,13 +103,13 @@
         </div>
 
         <!-- Special Instructions -->
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-light">
+        <div class="CARD shadow-sm mb-4">
+          <div class="CARD-header bg-light">
             <h6 class="mb-0">
               <i class="bi bi-chat-left-text me-2"></i>Special Instructions
             </h6>
           </div>
-          <div class="card-body">
+          <div class="CARD-body">
             <textarea class="form-control" rows="3" placeholder="Any special requests or dietary requirements..."
               [(ngModel)]="orderNotes"></textarea>
           </div>
@@ -118,13 +118,13 @@
 
       <!-- Order Summary -->
       <div class="col-lg-4">
-        <div class="card shadow-sm sticky-top" style="top: 20px;">
-          <div class="card-header bg-light">
+        <div class="CARD shadow-sm sticky-top" style="top: 20px;">
+          <div class="CARD-header bg-light">
             <h5 class="mb-0">
               <i class="bi bi-receipt me-2"></i>Order Summary
             </h5>
           </div>
-          <div class="card-body">
+          <div class="CARD-body">
             <!-- Summary Details -->
             <div class="summary-item d-flex justify-content-between mb-2">
               <span>Subtotal ({{getTotalItems()}} items):</span>
@@ -156,31 +156,31 @@
             <!-- Delivery Option -->
             <div class="mb-3">
               <label class="form-label fw-bold">Order Type</label>
-              <div class="form-check">
+              <!-- <div class="form-check">
                 <input class="form-check-input" type="radio" name="orderType" id="dineIn" [value]="'dine-in'"
                   [(ngModel)]="orderType" (change)="onOrderTypeChange()">
                 <label class="form-check-label" for="dineIn">
                   <i class="bi bi-shop me-1"></i>Dine In
                 </label>
-              </div>
+              </div> -->
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="orderType" id="takeaway" [value]="'takeaway'"
+                <input class="form-check-input" type="radio" name="orderType" id="TAKEAWAY" [value]="'TAKEAWAY'"
                   [(ngModel)]="orderType" (change)="onOrderTypeChange()">
-                <label class="form-check-label" for="takeaway">
+                <label class="form-check-label" for="TAKEAWAY">
                   <i class="bi bi-bag me-1"></i>Takeaway
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="orderType" id="delivery" [value]="'delivery'"
+                <input class="form-check-input" type="radio" name="orderType" id="DELIVERY" [value]="'DELIVERY'"
                   [(ngModel)]="orderType" (change)="onOrderTypeChange()">
-                <label class="form-check-label" for="delivery">
+                <label class="form-check-label" for="DELIVERY">
                   <i class="bi bi-truck me-1"></i>Delivery
                 </label>
               </div>
             </div>
 
             <!-- Table Number (for dine-in) -->
-            <div *ngIf="orderType === 'dine-in'" class="mb-3">
+            <!-- <div *ngIf="orderType === 'dine-in'" class="mb-3">
               <label class="form-label fw-bold">Table Number</label>
               <select class="form-select" [(ngModel)]="tableNumber">
                 <option value="">Select Table</option>
@@ -188,12 +188,12 @@
                   Table {{table}}
                 </option>
               </select>
-            </div>
+            </div> -->
 
             <!-- Checkout Button -->
             <button class="btn btn-warning w-100 py-3 fw-bold" (click)="proceedToCheckout()"
               [disabled]="!cart || cart.cartItems.length === 0">
-              <i class="bi bi-credit-card me-2"></i>
+              <i class="bi bi-credit-CARD me-2"></i>
               Proceed to Checkout - ${{getTotalAmount().toFixed(2)}}
             </button>
 
@@ -214,7 +214,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="checkoutModalLabel">
-          <i class="bi bi-credit-card me-2"></i>Complete Your Order
+          <i class="bi bi-credit-CARD me-2"></i>Complete Your Order
         </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -258,21 +258,21 @@
         <div class="mt-4">
           <h6>Payment Method</h6>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash"
+            <input class="form-check-input" type="radio" name="paymentMethod" id="CASH" value="CASH"
               [(ngModel)]="paymentMethod">
-            <label class="form-check-label" for="cash">
-              <i class="bi bi-cash-coin me-2"></i>Cash
+            <label class="form-check-label" for="CASH">
+              <i class="bi bi-CASH-coin me-2"></i>Cash
             </label>
           </div>
           <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card"
+            <input class="form-check-input" type="radio" name="paymentMethod" id="CARD" value="CARD"
               [(ngModel)]="paymentMethod">
-            <label class="form-check-label" for="card">
-              <i class="bi bi-credit-card me-2"></i>Credit/Debit Card
+            <label class="form-check-label" for="CARD">
+              <i class="bi bi-credit-CARD me-2"></i>Credit/Debit Card
             </label>
           </div>
           <div class="form-check">
-            <input class="form-check-input" type="radio" name="paymentMethod" id="digital" value="digital"
+            <input class="form-check-input" type="radio" name="paymentMethod" id="digital" value="BKASH"
               [(ngModel)]="paymentMethod">
             <label class="form-check-label" for="digital">
               <i class="bi bi-phone me-2"></i>Digital Wallet
@@ -281,7 +281,7 @@
         </div>
 
         <!-- Customer Info for Delivery -->
-        <div *ngIf="orderType === 'delivery'" class="mt-4">
+        <div *ngIf="orderType === 'DELIVERY'" class="mt-4">
           <h6>Delivery Information</h6>
           <div class="row">
             <div class="col-md-6">
@@ -324,15 +324,15 @@
         </p>
 
         <div class="mb-3">
-          <strong>Estimated Time:</strong> 20–30 minutes
+          <strong>Estimated Time:</strong> 10-15 minutes
         </div>
 
         <!-- ✅ New Print Button -->
-        <div class="d-grid gap-2 mb-3">
+        <!-- <div class="d-grid gap-2 mb-3">
           <button type="button" class="btn btn-outline-primary" (click)="printOrder()">
             <i class="bi bi-printer me-2"></i> Print Order
           </button>
-        </div>
+        </div> -->
 
         <!-- Existing Buttons -->
         <div class="d-grid gap-2">

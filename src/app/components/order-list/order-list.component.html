@@ -1,61 +1,134 @@
-<div class="container mt-3">
-  <h2>Order Management</h2>
+<!-- order-list.component.html -->
 
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <div>
-      <label for="statusFilter">Filter by Status:</label>
-      <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="onStatusChange()" class="form-select w-auto d-inline-block">
-        <option *ngFor="let s of statuses" [value]="s">{{ s }}</option>
+<div class="container mt-4">
+  <h2 class="mb-3">Orders</h2>
+
+  <!-- Filter by Status -->
+  <div class="mb-3 row g-2 align-items-center">
+    <div class="col-auto">
+      <label for="statusFilter" class="col-form-label">Filter by Status:</label>
+    </div>
+    <div class="col-auto">
+      <select id="statusFilter" class="form-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+        <option value="all">All</option>
+        <option *ngFor="let status of statuses" [value]="status">{{ status | titlecase }}</option>
       </select>
     </div>
   </div>
 
-  <div *ngIf="loading" class="text-center mt-3">
-    <p>Loading orders...</p>
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
 
-  <table *ngIf="!loading && orders.length > 0" class="table table-bordered table-striped">
-    <thead class="table-dark">
+  <!-- Order Table -->
+  <table *ngIf="!loading && orders.length > 0" class="table table-bordered table-hover">
+    <thead class="table-light">
       <tr>
-        <th>ID</th>
-        <th>User</th>
-        <th>Total</th>
+        <th>Order ID</th>
+        <th>Type</th>
         <th>Status</th>
-        <th>Created</th>
-        <th>Items</th>
+        <th>Customer</th>
+        <th>Payment</th>
+        <th>Total</th>
+        <th>Created At</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let order of orders">
+      <tr *ngFor="let order of orders; trackBy: trackByItemId">
         <td>{{ order.id }}</td>
-        <td>{{ order.userName }}</td>
-        <td>{{ order.totalAmount | currency:'BDT' }}</td>
-        <td><span class="badge bg-info text-dark">{{ order.status }}</span></td>
-        <td>{{ order.createdAt | date:'short' }}</td>
         <td>
-          <ul class="mb-0">
-            <li *ngFor="let item of order.items">
-              {{ item.menuItemName }} (x{{ item.quantity }}) - {{ item.unitPrice | currency:'BDT' }}
-            </li>
-          </ul>
+          <span class="badge" [ngClass]="getOrderTypeBadgeClass(order.orderType)">
+            {{ order.orderType | titlecase }}
+          </span>
         </td>
         <td>
-          <div class="btn-group" role="group">
-            <button *ngIf="order.status === 'PENDING'" class="btn btn-sm btn-success" (click)="updateStatus(order, 'CONFIRMED')">Confirm</button>
-            <button *ngIf="order.status === 'CONFIRMED'" class="btn btn-sm btn-warning" (click)="updateStatus(order, 'PREPARING')">Prepare</button>
-            <button *ngIf="order.status === 'PREPARING'" class="btn btn-sm btn-primary" (click)="updateStatus(order, 'IN_PROGRESS')">Start</button>
-            <button *ngIf="order.status === 'IN_PROGRESS'" class="btn btn-sm btn-info" (click)="updateStatus(order, 'COMPLETED')">Complete</button>
-            <button *ngIf="order.status !== 'COMPLETED' && order.status !== 'CANCELLED'" class="btn btn-sm btn-danger" (click)="updateStatus(order, 'CANCELLED')">Cancel</button>
-            <button class="btn btn-sm btn-outline-danger" (click)="deleteOrder(order.id)">Delete</button>
+          <span class="badge" [ngClass]="getStatusBadgeClass(order.status)">
+            {{ order.status | titlecase }}
+          </span>
+        </td>
+        <td>
+          {{ order.customerName || 'N/A' }}<br>
+          {{ order.customerPhone || '' }}
+        </td>
+        <td>{{ order.paymentMethod | titlecase }}</td>
+        <td>{{ order.totalAmount | currency:'BDT':'symbol' }}</td>
+        <td>{{ order.createdAt | date:'short' }}</td>
+        <td>
+          <button class="btn btn-sm btn-info me-1" (click)="viewOrderDetails(order)">View</button>
+          <button class="btn btn-sm btn-danger me-1" (click)="deleteOrder(order.id)">Delete</button>
+          
+          <div class="dropdown d-inline">
+            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Change Status
+            </button>
+            <ul class="dropdown-menu">
+              <li *ngFor="let status of statuses">
+                <button class="dropdown-item"  (click)="updateStatus(order, status)">{{ status | titlecase }}</button>
+              </li>
+            </ul>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div *ngIf="!loading && orders.length === 0" class="text-center mt-4">
-    <p>No orders found for status "{{ selectedStatus }}"</p>
+  <div *ngIf="!loading && orders.length === 0" class="alert alert-warning">
+    No orders found.
   </div>
 </div>
 
+<!-- Order Details Modal -->
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderDetailsModalLabel">Order Details - {{ selectedOrder?.id }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedOrder">
+        <p><strong>Order Type:</strong> {{ selectedOrder.orderType | titlecase }}</p>
+        <p><strong>Status:</strong> {{ selectedOrder.status | titlecase }}</p>
+        <p><strong>Customer:</strong> {{ selectedOrder.customerName || 'N/A' }} - {{ selectedOrder.customerPhone || '' }}</p>
+        <p><strong>Payment:</strong> {{ selectedOrder.paymentMethod | titlecase }}</p>
+        <p><strong>Table Number:</strong> {{ selectedOrder.tableNumber || 'N/A' }}</p>
+        <p><strong>Delivery Address:</strong> {{ selectedOrder.deliveryAddress || 'N/A' }}</p>
+        <p><strong>Order Notes:</strong> {{ selectedOrder.orderNotes || 'N/A' }}</p>
+        <hr>
+        <h6>Items</h6>
+        <table class="table table-sm table-bordered">
+          <thead>
+            <tr>
+              <th>Item Name</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of selectedOrder.items">
+              <td>{{ item.menuItemName || item.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.unitPrice || item.price | currency:'BDT':'symbol' }}</td>
+              <td>{{ (item.unitPrice || item.price) * item.quantity | currency:'BDT':'symbol' }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <hr>
+        <p><strong>Subtotal:</strong> {{ selectedOrder.subtotal || selectedOrder.totalAmount || 0 | currency:'BDT':'symbol' }}</p>
+        <p><strong>Tax:</strong> {{ selectedOrder.taxAmount || 0 | currency:'BDT':'symbol' }}</p>
+        <p><strong>Delivery Fee:</strong> {{ selectedOrder.deliveryFee || 0 | currency:'BDT':'symbol' }}</p>
+        <p><strong>Discount:</strong> {{ selectedOrder.discount || 0 | currency:'BDT':'symbol' }}</p>
+        <h5>Total: {{ selectedOrder.totalAmount || 0 | currency:'BDT':'symbol' }}</h5>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      <button type="button" class="btn btn-primary" (click)="selectedOrder && printOrder(selectedOrder)">Print</button>
+
+      </div>
+    </div>
+  </div>
+</div>

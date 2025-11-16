@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { CartService, CartResponse } from 'src/app/services/cart.service';
 
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -287,8 +288,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  @HostListener('document:keydown.escape', ['$event'])
-  onEscapePressed(event: KeyboardEvent): void {
+@HostListener('document:keydown.escape', ['$event'])
+onEscapePressed(event: KeyboardEvent): void{
     if (this.showAuthModal) {
       this.closeAuthModal();
     }
