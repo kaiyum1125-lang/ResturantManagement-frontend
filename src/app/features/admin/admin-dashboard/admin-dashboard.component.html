@@ -81,17 +81,17 @@
 
             <div class="stat-card">
                 <div class="stat-icon warning">
-                    <i class="bi bi-currency-dollar"></i>
+                    <i class="fas fa-bangladeshi-taka-sign"></i> ৳
                 </div>
                 <div class="stat-content">
-                    <h3 class="stat-value">${{stats.averagePrice}}</h3>
+                    <h3 class="stat-value">BDT{{stats.averagePrice}}</h3>
                     <p class="stat-label">Average Price</p>
                     <div class="stat-trend">
                         <span *ngIf="stats.mostExpensiveItem" class="trend-item">
-                            High: ${{stats.mostExpensiveItem.price}}
+                            High: BDT{{stats.mostExpensiveItem.price}}
                         </span>
                         <span *ngIf="stats.leastExpensiveItem" class="trend-item">
-                            Low: ${{stats.leastExpensiveItem.price}}
+                            Low: BDT{{stats.leastExpensiveItem.price}}
                         </span>
                     </div>
                 </div>

@@ -67,7 +67,7 @@
 
                 <!-- Price -->
                 <div class="col-2">
-                  <span class="fw-bold text-warning">${{item.price}}</span>
+                  <span class="fw-bold text-warning">৳{{item.price}}</span>
                 </div>
 
                 <!-- Quantity Controls -->
@@ -91,7 +91,7 @@
                 <!-- Total and Remove -->
                 <div class="col-1 text-end">
                   <div class="mb-2">
-                    <strong>${{(item.price * item.quantity).toFixed(2)}}</strong>
+                    <strong>৳{{(item.price * item.quantity).toFixed(2)}}</strong>
                   </div>
                   <button class="btn btn-outline-danger btn-sm" (click)="removeItem(item)">
                     <i class="bi bi-trash"></i>
@@ -128,29 +128,29 @@
             <!-- Summary Details -->
             <div class="summary-item d-flex justify-content-between mb-2">
               <span>Subtotal ({{getTotalItems()}} items):</span>
-              <span>${{getSubtotal().toFixed(2)}}</span>
+              <span>৳{{getSubtotal().toFixed(2)}}</span>
             </div>
 
             <div class="summary-item d-flex justify-content-between mb-2">
               <span>Tax ({{taxRate * 100}}%):</span>
-              <span>${{getTaxAmount().toFixed(2)}}</span>
+              <span>৳{{getTaxAmount().toFixed(2)}}</span>
             </div>
 
             <div *ngIf="deliveryFee > 0" class="summary-item d-flex justify-content-between mb-2">
               <span>Delivery Fee:</span>
-              <span>${{deliveryFee.toFixed(2)}}</span>
+              <span>৳{{deliveryFee.toFixed(2)}}</span>
             </div>
 
             <div *ngIf="discount > 0" class="summary-item d-flex justify-content-between mb-2 text-success">
               <span>Discount:</span>
-              <span>-${{discount.toFixed(2)}}</span>
+              <span>-৳{{discount.toFixed(2)}}</span>
             </div>
 
             <hr>
 
             <div class="summary-total d-flex justify-content-between mb-3">
               <strong>Total:</strong>
-              <strong class="text-warning">${{getTotalAmount().toFixed(2)}}</strong>
+              <strong class="text-warning">৳{{getTotalAmount().toFixed(2)}}</strong>
             </div>
 
             <!-- Delivery Option -->
@@ -194,7 +194,7 @@
             <button class="btn btn-warning w-100 py-3 fw-bold" (click)="proceedToCheckout()"
               [disabled]="!cart || cart.cartItems.length === 0">
               <i class="bi bi-credit-CARD me-2"></i>
-              Proceed to Checkout - ${{getTotalAmount().toFixed(2)}}
+              Proceed to Checkout - ৳{{getTotalAmount().toFixed(2)}}
             </button>
 
             <!-- Continue Shopping -->
@@ -224,7 +224,7 @@
           <div class="col-md-6">
             <h6>Order Details</h6>
             <div *ngFor="let item of cart?.cartItems" class="mb-2">
-              <small>{{item.quantity}}x {{item.name}} - ${{(item.price * item.quantity).toFixed(2)}}</small>
+              <small>{{item.quantity}}x {{item.name}} - ৳{{(item.price * item.quantity).toFixed(2)}}</small>
             </div>
             <div *ngIf="orderNotes" class="mt-2">
               <small class="text-info">
@@ -236,20 +236,20 @@
             <h6>Order Summary</h6>
             <div class="d-flex justify-content-between">
               <span>Subtotal:</span>
-              <span>${{getSubtotal().toFixed(2)}}</span>
+              <span>৳{{getSubtotal().toFixed(2)}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span>Tax:</span>
-              <span>${{getTaxAmount().toFixed(2)}}</span>
+              <span>৳{{getTaxAmount().toFixed(2)}}</span>
             </div>
             <div class="d-flex justify-content-between">
               <span>Delivery:</span>
-              <span>${{deliveryFee.toFixed(2)}}</span>
+              <span>৳{{deliveryFee.toFixed(2)}}</span>
             </div>
             <hr>
             <div class="d-flex justify-content-between fw-bold">
               <span>Total:</span>
-              <span class="text-warning">${{getTotalAmount().toFixed(2)}}</span>
+              <span class="text-warning">৳{{getTotalAmount().toFixed(2)}}</span>
             </div>
           </div>
         </div>

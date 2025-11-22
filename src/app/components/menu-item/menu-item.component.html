@@ -62,14 +62,14 @@
             <div class="mb-3">
               <label class="form-label">Price *</label>
               <div class="input-group">
-                <span class="input-group-text">$</span>
+                <span class="input-group-text">৳</span>
                 <input type="number" formControlName="price" class="form-control" 
                        placeholder="Enter price" min="1"
                        [class.is-invalid]="showFieldError('price')">
               </div>
               <div class="invalid-feedback" *ngIf="showFieldError('price')">
                 <div *ngIf="price?.errors?.['required']">Price is required</div>
-                <div *ngIf="price?.errors?.['min']">Price must be at least $1</div>
+                <div *ngIf="price?.errors?.['min']">Price must be at least ৳1</div>
               </div>
             </div>
 
@@ -176,7 +176,7 @@
                       </div>
                     </td>
                     <td>
-                      <span class="price-badge">{{ item.price | currency:'USD ' }}</span>
+                      <span class="price-badge">{{ item.price | currency:'BDT ' }}</span>
                     </td>
                     <td>
                       <span class="category-badge">{{ item.category?.name }}</span>

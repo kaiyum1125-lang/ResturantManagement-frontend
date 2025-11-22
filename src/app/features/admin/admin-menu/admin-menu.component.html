@@ -76,7 +76,7 @@
         <h3 class="menu-item-name">{{item.name}}</h3>
         <p class="menu-item-description">{{item.description || 'No description'}}</p>
         
-        <div class="menu-item-price">${{item.price}}</div>
+        <div class="menu-item-price">৳{{item.price}}</div>
 
         <div class="menu-card-actions">
           <button class="btn-icon success" (click)="toggleAvailability(item)" 
@@ -135,7 +135,7 @@
             <div class="form-group">
               <label for="price">Price *</label>
               <div class="input-with-icon">
-                <span class="input-icon">$</span>
+                <span class="input-icon">৳</span>
                 <input type="number" 
                        id="price"
                        formControlName="price"
